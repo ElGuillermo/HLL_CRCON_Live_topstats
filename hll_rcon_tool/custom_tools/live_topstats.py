@@ -19,7 +19,7 @@ from rcon.utils import get_server_number
 # -----------------------------------------------------------------------------
 
 # Translations
-# Available : 0 for english, 1 for french, 2 for german, 3 for brazilian portuguese
+# Available : 0 for english, 1 for french, 2 for german, 3 for brazilian portuguese, 4 for polish
 LANG = 0
 
 # Can be enabled/disabled on your different game servers
@@ -97,26 +97,26 @@ LOCAL_TIME_FORMAT = "%d/%m/%Y à %Hh%M"
 
 
 # Translations
-# "key" : ["english", "french", "german", "brazilian-portuguese"]
+# "key" : ["english", "french", "german", "brazilian-portuguese", "polish"]
 # ----------------------------------------------
 
 TRANSL = {
-    "nostatsyet": ["No stats yet", "Pas de stats", "noch keine Statistiken", "Sem estatísticas ainda"],
-    "allies": ["all", "all", "Allierte", "aliados"],
-    "axis": ["axi", "axe", "Achsenmächte", "eixo"],
-    "best_players": ["Best players", "Meilleurs joueurs", "Beste Spieler", "Melhores jogadores"],
-    "armycommander": ["Commander", "Commandant", "Kommandant", "Comandante"],
-    "infantry": ["Infantry", "Infanterie", "Infanterie", "Infantaria"],
-    "tankers": ["Tankers", "Tankistes", "Panzerspieler", "Tanqueiros"],
-    "best_squads": ["Best squads", "Meilleures squads", "Beste Mannschaften", "Melhores esquadrões"],
-    "offense": ["attack", "attaque", "Angriff", "ataque"],
-    "defense": ["defense", "défense", "Verteidigung", "defesa"],
-    "combat": ["combat", "combat", "Kampf", "combate"],
-    "support": ["support", "soutien", "Unterstützung", "suporte"],
-    "ratio": ["ratio", "ratio", "Verhältnis", "proporção"],
-    "killrate": ["kills/min", "kills/min", "Kills/min", "abates/min"],
-    "vip_until": ["VIP until", "VIP jusqu'au", "VIP bis", "VIP até"],
-    "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!"]
+    "nostatsyet": ["No stats yet", "Pas de stats", "noch keine Statistiken", "Sem estatísticas ainda", "Brak dostępnych statystyk"],
+    "allies": ["all", "all", "Allierte", "aliados", "Alianci"],
+    "axis": ["axi", "axe", "Achsenmächte", "eixo", "Oś"],
+    "best_players": ["Best players", "Meilleurs joueurs", "Beste Spieler", "Melhores jogadores", "Najlepsi gracze"],
+    "armycommander": ["Commander", "Commandant", "Kommandant", "Comandante", "Dowódca"],
+    "infantry": ["Infantry", "Infanterie", "Infanterie", "Infantaria", "Piechota"],
+    "tankers": ["Tankers", "Tankistes", "Panzerspieler", "Tanqueiros", "Czołgiści"],
+    "best_squads": ["Best squads", "Meilleures squads", "Beste Mannschaften", "Melhores esquadrões", "Najlepsze jednostki"],
+    "offense": ["attack", "attaque", "Angriff", "ataque", "Ofensywa"],
+    "defense": ["defense", "défense", "Verteidigung", "defesa", "Defensywa"],
+    "combat": ["combat", "combat", "Kampf", "combate", "Walka"],
+    "support": ["support", "soutien", "Unterstützung", "suporte", "Wsparcie"],
+    "ratio": ["ratio", "ratio", "Verhältnis", "proporção", "Średnia"],
+    "killrate": ["kills/min", "kills/min", "Kills/min", "abates/min", "Zabójstwa/min"],
+    "vip_until": ["VIP until", "VIP jusqu'au", "VIP bis", "VIP até", "VIP do"],
+    "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!", "Aktualnie ma VIPa!"]
 }
 
 # (End of configuration)
