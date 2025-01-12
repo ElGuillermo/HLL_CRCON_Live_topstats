@@ -11,7 +11,11 @@ Feel free to use/modify/distribute, as long as you keep this note in your code
 
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
+
+import discord
+
 from rcon.rcon import Rcon, StructuredLogLineWithMetaData
+from rcon.user_config.rcon_server_settings import RconServerSettingsUserConfig
 from rcon.utils import get_server_number
 
 
@@ -88,7 +92,7 @@ SEED_LIMIT = 40
 
 # How many VIP hours awarded ?
 # If the player already has a VIP that ends AFTER this delay, VIP won't be given.
-VIP_HOURS = 24
+VIP_HOURS = 25
 
 # VIP announce : local time
 # Find you local timezone : https://utctime.info/timezone/
@@ -118,6 +122,43 @@ TRANSL = {
     "vip_until": ["VIP until", "VIP jusqu'au", "VIP bis", "VIP até", "VIP do"],
     "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!", "Aktualnie ma VIPa!"]
 }
+
+# Discord
+# -------------------------------------
+
+# Dedicated Discord's channel webhook
+SERVER_CONFIG = [
+    ["https://discord.com/api/webhooks/...", False],  # Server 1
+    ["https://discord.com/api/webhooks/...", False],  # Server 2
+    ["https://discord.com/api/webhooks/...", False],  # Server 3
+    ["https://discord.com/api/webhooks/...", False],  # Server 4
+    ["https://discord.com/api/webhooks/...", False],  # Server 5
+    ["https://discord.com/api/webhooks/...", False],  # Server 6
+    ["https://discord.com/api/webhooks/...", False],  # Server 7
+    ["https://discord.com/api/webhooks/...", False],  # Server 8
+    ["https://discord.com/api/webhooks/...", False],  # Server 9
+    ["https://discord.com/api/webhooks/...", False]  # Server 10
+]
+
+# Discord : embed author icon
+DISCORD_EMBED_AUTHOR_ICON_URL = (
+    "https://cdn.discordapp.com/icons/316459644476456962/73a28de670af9e6569f231c9385398f3.webp?size=64"
+)
+
+# Miscellaneous (you should not change these)
+# -------------------------------------
+
+# Clan related (as set in /settings/rcon-server)
+try:
+    config = RconServerSettingsUserConfig.load_from_db()
+    CLAN_URL = str(config.discord_invite_url)
+    DISCORD_EMBED_AUTHOR_URL = str(config.server_url)
+except Exception:
+    CLAN_URL = ""
+    DISCORD_EMBED_AUTHOR_URL = ""
+
+# Bot name that will be displayed in CRCON "audit logs" and Discord embeds
+BOT_NAME = "CRCON_top_stats_of_the_game"
 
 # (End of configuration)
 # -----------------------------------------------------------------------------
@@ -216,7 +257,7 @@ def get_top(
 
             # Give VIP
             if is_vip_for_less_than_xh(rcon, sample['player_id'], VIP_HOURS):
-                output += give_xh_vip(rcon, sample['player_id'], sample['name'], VIP_HOURS)
+                output += give_xh_vip(rcon, sample['player_id'], VIP_HOURS)
             else:
                 output += f"{TRANSL['already_vip'][LANG]}\n"
 
@@ -225,18 +266,15 @@ def get_top(
     return output
 
 
-def give_xh_vip(rcon: Rcon, player_id: str, player_name: str, hours_awarded: int):
+def give_xh_vip(rcon: Rcon, player_id: str, hours_awarded: int):
     """
         Gives a x hours VIP
         Returns a str that announces the VIP expiration (local) time
     """
-    # Kombiniert den Spielernamen mit "top_player"
-    combined_name = f"{player_name} Top-Player"
-    
     # Gives X hours VIP
     now_plus_xh = datetime.now(timezone.utc) + timedelta(hours=hours_awarded)
     now_plus_xh_vip_formatted = now_plus_xh.strftime('%Y-%m-%dT%H:%M:%SZ')
-    rcon.add_vip(player_id, combined_name, now_plus_xh_vip_formatted)
+    rcon.add_vip(player_id, "top_player", now_plus_xh_vip_formatted)
 
     # Returns a string giving the new expiration date in local time
     now_plus_xh_utc = now_plus_xh.replace(tzinfo=ZoneInfo("UTC"))
@@ -289,7 +327,7 @@ def teamplay(obj) -> int:
     returns a combined combat + (support * COMBATSUPPORT_RATIO) score
     """
     if COMBATSUPPORT_RATIO == 0:
-        return int(int(obj["combat"]) + int(obj["support"]))    
+        return int(int(obj["combat"]) + int(obj["support"]))
     return int(int(obj["combat"]) + int(obj["support"]) * abs(COMBATSUPPORT_RATIO))
 
 
@@ -568,5 +606,34 @@ def stats_on_match_end(
             top_squads_armor_teamplay,
         )
 
+        # No stats : no need to send any ingame message
         if message != f"{TRANSL['nostatsyet'][LANG]}":
             message_all_players(rcon, message)
+
+        # Check if Discord webhook is enabled
+        server_number = int(get_server_number())
+        if not SERVER_CONFIG[server_number - 1][1]:
+            return
+        discord_webhook = SERVER_CONFIG[server_number - 1][0]
+
+        # Create and send discord embed
+        webhook = discord.SyncWebhook.from_url(discord_webhook)
+        embed = discord.Embed(
+            title=TRANSL['gamejustended'][LANG],
+            url="",
+            description=message,
+            color=0xffffff
+        )
+        embed.set_author(
+            name=BOT_NAME,
+            url=DISCORD_EMBED_AUTHOR_URL,
+            icon_url=DISCORD_EMBED_AUTHOR_ICON_URL
+        )
+        # embed.set_thumbnail(url=common_functions.get_avatar_url(soldier_id))
+
+        embeds = []
+        embeds.append(embed)
+        try:
+            webhook.send(embeds=embeds, wait=True)
+        except Exception:
+            pass
