@@ -10,6 +10,7 @@ that displays and rewards top players, based on their scores.
 - Message can be called anytime with `!top` chat command (configurable).
 - Message will be displayed to all players at game's end.
 - You can choose to give VIPs at game's end (you can define the number of top players that will receive one, and it's duration).
+- You can send the report in a Discord channel
 
 ## Observed scores
 
