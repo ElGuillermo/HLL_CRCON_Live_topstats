@@ -122,7 +122,7 @@ TRANSL = {
 # VIP announce : local time
 # Find you local timezone : https://utctime.info/timezone/
 LOCAL_TIMEZONE = "Europe/Paris"
-LOCAL_TIME_FORMAT = f"%d/%m/%Y {TRANSL["vip_at"][LANG]} %Hh%M"
+LOCAL_TIME_FORMAT = f"%d/%m/%Y {TRANSL['vip_at'][LANG]} %Hh%M"
 
 # Discord
 # -------------------------------------
