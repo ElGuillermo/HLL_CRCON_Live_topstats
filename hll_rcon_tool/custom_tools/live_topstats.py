@@ -94,11 +94,6 @@ SEED_LIMIT = 40
 # If the player already has a VIP that ends AFTER this delay, VIP won't be given.
 VIP_HOURS = 25
 
-# VIP announce : local time
-# Find you local timezone : https://utctime.info/timezone/
-LOCAL_TIMEZONE = "Europe/Paris"
-LOCAL_TIME_FORMAT = "%d/%m/%Y à %Hh%M"
-
 
 # Translations
 # "key" : ["english", "french", "german", "brazilian-portuguese", "polish"]
@@ -120,8 +115,14 @@ TRANSL = {
     "ratio": ["ratio", "ratio", "Verhältnis", "proporção", "Średnia"],
     "killrate": ["kills/min", "kills/min", "Kills/min", "abates/min", "Zabójstwa/min"],
     "vip_until": ["VIP until", "VIP jusqu'au", "VIP bis", "VIP até", "VIP do"],
-    "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!", "Aktualnie ma VIPa!"]
+    "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!", "Aktualnie ma VIPa!"],
+    "vip_at": ["at", "à", "um", "às", "do godziny"]
 }
+
+# VIP announce : local time
+# Find you local timezone : https://utctime.info/timezone/
+LOCAL_TIMEZONE = "Europe/Paris"
+LOCAL_TIME_FORMAT = f"%d/%m/%Y {TRANSL["vip_at"][LANG]} %Hh%M"
 
 # Discord
 # -------------------------------------
