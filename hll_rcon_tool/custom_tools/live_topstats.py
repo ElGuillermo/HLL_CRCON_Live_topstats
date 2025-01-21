@@ -94,7 +94,6 @@ SEED_LIMIT = 40
 # If the player already has a VIP that ends AFTER this delay, VIP won't be given.
 VIP_HOURS = 25
 
-
 # Translations
 # "key" : ["english", "french", "german", "brazilian-portuguese", "polish"]
 # ----------------------------------------------
@@ -116,6 +115,7 @@ TRANSL = {
     "killrate": ["kills/min", "kills/min", "Kills/min", "abates/min", "Zabójstwa/min"],
     "vip_until": ["VIP until", "VIP jusqu'au", "VIP bis", "VIP até", "VIP do"],
     "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!", "Aktualnie ma VIPa!"],
+    "gamejustended": ["Game just ended", "Partie terminée", "Spiel beendet", "Jogo acabou", "Gra właśnie się zakończyła"],
     "vip_at": ["at", "à", "um", "às", "do godziny"]
 }
 
