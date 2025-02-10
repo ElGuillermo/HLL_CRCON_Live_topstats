@@ -635,7 +635,6 @@ def stats_on_match_end(
             url=DISCORD_EMBED_AUTHOR_URL,
             icon_url=DISCORD_EMBED_AUTHOR_ICON_URL
         )
-        # embed.set_thumbnail(url=common_functions.get_avatar_url(soldier_id))
 
         embeds = []
         embeds.append(embed)
