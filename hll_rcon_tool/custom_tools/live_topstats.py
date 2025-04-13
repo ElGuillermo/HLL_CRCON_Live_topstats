@@ -39,10 +39,10 @@ ENABLE_ON_SERVERS = ["1"]
 #      0.5  = offense counts 2x more than defense (defense malus)
 #      0    = bonus disabled
 # Any negative value will be converted to positive (ie : -1.5 -> 1.5)
-OFFENSEDEFENSE_RATIO = 1.5
+OFFENSEDEFENSE_RATIO = 1.75
 
 # Gives a bonus to support
-COMBATSUPPORT_RATIO = 1.5
+COMBATSUPPORT_RATIO = 1.75
 
 
 # Calling from chat
@@ -73,7 +73,7 @@ TOPS_MATCHEND_DETAIL_SQUADS = 1
 
 # Give VIPs at match's end to the best nth top in each :
 # - commander (best combat + (support * COMBATSUPPORT_RATIO))
-# - infantry (best offense * (defense * OFFENSEDEFENSE_RATIO))
+# - infantry (best offense + (defense * OFFENSEDEFENSE_RATIO))
 # - infantry (best combat + (support * COMBATSUPPORT_RATIO))
 # ie :
 # 1 = gives a VIP to the top #1 players (3 VIPs awarded)
@@ -81,7 +81,7 @@ TOPS_MATCHEND_DETAIL_SQUADS = 1
 # 0 to disable
 VIP_WINNERS = 1
 
-# Avoid to give a VIP to a a "entered at last second" commander
+# Avoid to give a VIP to a "entered at last second" commander
 VIP_COMMANDER_MIN_PLAYTIME_MINS = 20
 VIP_COMMANDER_MIN_SUPPORT_SCORE = 1000
 
@@ -92,7 +92,7 @@ SEED_LIMIT = 40
 
 # How many VIP hours awarded ?
 # If the player already has a VIP that ends AFTER this delay, VIP won't be given.
-VIP_HOURS = 25
+VIP_HOURS = 24
 
 # Translations
 # "key" : ["english", "french", "german", "brazilian-portuguese", "polish"]
@@ -258,7 +258,6 @@ def get_top(
 
             # Give VIP
             if is_vip_for_less_than_xh(rcon, sample['player_id'], VIP_HOURS):
-                # output += give_xh_vip(rcon, sample['player_id'], VIP_HOURS)
                 output += give_xh_vip(rcon, sample['player_id'], sample['name'], VIP_HOURS)
             else:
                 output += f"{TRANSL['already_vip'][LANG]}\n"
@@ -279,7 +278,6 @@ def give_xh_vip(rcon: Rcon, player_id: str, player_name: str, hours_awarded: int
     # Gives X hours VIP
     now_plus_xh = datetime.now(timezone.utc) + timedelta(hours=hours_awarded)
     now_plus_xh_vip_formatted = now_plus_xh.strftime('%Y-%m-%dT%H:%M:%SZ')
-    # rcon.add_vip(player_id, "top_player", now_plus_xh_vip_formatted)
     rcon.add_vip(player_id, combined_name, now_plus_xh_vip_formatted)
 
     # Returns a string giving the new expiration date in local time
@@ -321,11 +319,11 @@ def ratio(obj) -> float:
 
 def real_offdef(obj) -> int:
     """
-    returns a combined offense * (defense * OFFENSEDEFENSE_RATIO) score
+    returns a combined offense + (defense * OFFENSEDEFENSE_RATIO) score
     """
     if OFFENSEDEFENSE_RATIO == 0:
-        return int(int(obj["offense"]) * int(obj["defense"]))
-    return int(int(obj["offense"]) * (int(obj["defense"]) * abs(OFFENSEDEFENSE_RATIO)))
+        return int(int(obj["offense"]) + int(obj["defense"]))
+    return int(int(obj["offense"]) + (int(obj["defense"]) * abs(OFFENSEDEFENSE_RATIO)))
 
 
 def teamplay(obj) -> int:
@@ -445,7 +443,7 @@ def stats_display(
         ):
             message += f"▓ {TRANSL['infantry'][LANG]} ▓\n\n"
             if len(top_infantry_offdef) != 0:
-                message += f"─ {TRANSL['offense'][LANG]} * ({TRANSL['defense'][LANG]} * {str(offensedefense_ratio)}) ─\n{top_infantry_offdef}\n"
+                message += f"─ {TRANSL['offense'][LANG]} + ({TRANSL['defense'][LANG]} * {str(offensedefense_ratio)}) ─\n{top_infantry_offdef}\n"
             if len(top_infantry_teamplay) != 0:
                 message += f"─ {TRANSL['combat'][LANG]} + ({TRANSL['support'][LANG]} * {str(combatsupport_ratio)}) ─\n{top_infantry_teamplay}\n"
             if len(top_infantry_ratio) != 0:
@@ -464,14 +462,14 @@ def stats_display(
         if len(top_squads_infantry_offdef) != 0 or len(top_squads_infantry_teamplay) != 0:
             message += f"▓ {TRANSL['infantry'][LANG]} ▓\n\n"
             if len(top_squads_infantry_offdef) != 0:
-                message += f"─ {TRANSL['offense'][LANG]} * ({TRANSL['defense'][LANG]} * {str(offensedefense_ratio)}) ─\n{top_squads_infantry_offdef}\n"
+                message += f"─ {TRANSL['offense'][LANG]} + ({TRANSL['defense'][LANG]} * {str(offensedefense_ratio)}) ─\n{top_squads_infantry_offdef}\n"
             if len(top_squads_infantry_teamplay) != 0:
                 message += f"─ {TRANSL['combat'][LANG]} + ({TRANSL['support'][LANG]} * {str(combatsupport_ratio)}) ─\n{top_squads_infantry_teamplay}\n"
         # squads / armor
         if len(top_squads_armor_offdef) != 0 or len(top_squads_armor_teamplay) != 0:
             message += f"▓ {TRANSL['tankers'][LANG]} ▓\n\n"
             if len(top_squads_armor_offdef) != 0:
-                message += f"─ {TRANSL['offense'][LANG]} * ({TRANSL['defense'][LANG]} * {str(offensedefense_ratio)}) ─\n{top_squads_armor_offdef}\n"
+                message += f"─ {TRANSL['offense'][LANG]} + ({TRANSL['defense'][LANG]} * {str(offensedefense_ratio)}) ─\n{top_squads_armor_offdef}\n"
             if len(top_squads_armor_teamplay) != 0:
                 message += f"─ {TRANSL['combat'][LANG]} + ({TRANSL['support'][LANG]} * {str(combatsupport_ratio)}) ─\n{top_squads_armor_teamplay}\n"
 
