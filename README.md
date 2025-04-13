@@ -18,17 +18,17 @@ that displays and rewards top players, based on their scores.
     - commanders
         - combat + (support * bonus)
     - infantry players
-        - offense * (defense * bonus)
+        - offense + (defense * bonus)
         - combat + (support * bonus)
 - (for info only - no VIPs given)
     - infantry players
         - kills / deaths
         - kills / minute
     - infantry squads
-        - offense * (defense * bonus)
+        - offense + (defense * bonus)
         - combat + (support * bonus)
     - armor squads
-        - offense * (defense * bonus)
+        - offense + (defense * bonus)
         - combat + (support * bonus)
 
 A multiplier bonus can be given to defense and support scores, if you want to reward teamplay more than individual skills.  
@@ -36,19 +36,10 @@ Doing so will ensure the teamplayers will enter the server more often than CODdi
 
 Tankers don't get any VIP, as they usually have a huge combat score and would easily get a VIP on each game.
 
-Players must gain offense AND defense points to enter the top, thus to avoid giving VIPs to those who purposely stay AFK in HQs.
-
 ## Install
 
 > [!NOTE]
 > The shell commands given below assume your CRCON is installed in `/root/hll_rcon_tool`.  
-> You may have installed your CRCON in a different folder.  
->   
-> Some Ubuntu Linux distributions disable the `root` user and `/root` folder by default.  
-> In these, your default user is `ubuntu`, using the `/home/ubuntu` folder.  
-> You should then find your CRCON in `/home/ubuntu/hll_rcon_tool`.  
->   
-> If so, you'll have to adapt the commands below accordingly.
 
 - Log into your CRCON host machine using SSH and enter these commands (one line at at time) :  
 
