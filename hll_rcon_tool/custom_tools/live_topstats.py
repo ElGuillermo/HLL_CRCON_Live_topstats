@@ -24,7 +24,7 @@ from rcon.utils import get_server_number
 
 # Translations
 # Available : 0 for english, 1 for french, 2 for german, 3 for brazilian portuguese, 4 for polish
-LANG = 0
+LANG = 1
 
 # Can be enabled/disabled on your different game servers
 # ie : ["1"]           = enabled only on server 1
@@ -73,7 +73,7 @@ TOPS_MATCHEND_DETAIL_SQUADS = 1
 
 # Give VIPs at match's end to the best nth top in each :
 # - commander (best combat + (support * COMBATSUPPORT_RATIO))
-# - infantry (best offense + (defense * OFFENSEDEFENSE_RATIO))
+# - infantry (best offense * (defense * OFFENSEDEFENSE_RATIO))
 # - infantry (best combat + (support * COMBATSUPPORT_RATIO))
 # ie :
 # 1 = gives a VIP to the top #1 players (3 VIPs awarded)
@@ -129,7 +129,7 @@ LOCAL_TIME_FORMAT = f"%d/%m/%Y {TRANSL['vip_at'][LANG]} %Hh%M"
 
 # Dedicated Discord's channel webhook
 SERVER_CONFIG = [
-    ["https://discord.com/api/webhooks/...", False],  # Server 1
+    ["https://discord.com/api/webhooks/1327391129838157835/AWvUaXDXjknOM8NRO7PlP-EPAlejx00b3wlbaySdgOZrlPZtGIVk5B1nmakq36Fm3scc", True],  # Server 1
     ["https://discord.com/api/webhooks/...", False],  # Server 2
     ["https://discord.com/api/webhooks/...", False],  # Server 3
     ["https://discord.com/api/webhooks/...", False],  # Server 4
@@ -291,7 +291,7 @@ def message_all_players(rcon: Rcon, message: str):
     """
     Sends a message to all connected players
     """
-    all_players_list = rcon.get_playerids()
+    all_players_list = rcon.get_player_ids()  # v18
     for player in all_players_list:
         player_name = player[0]
         player_id = player[1]
