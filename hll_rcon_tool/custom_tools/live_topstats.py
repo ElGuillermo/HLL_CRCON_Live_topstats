@@ -23,7 +23,7 @@ from rcon.utils import get_server_number
 # -----------------------------------------------------------------------------
 
 # Translations
-# Available : 0 for english, 1 for french, 2 for german, 3 for brazilian portuguese, 4 for polish
+# Available : 0 for english, 1 for french, 2 for german, 3 for brazilian portuguese, 4 for polish, 5 for spanish
 LANG = 0
 
 # Can be enabled/disabled on your different game servers
@@ -95,33 +95,33 @@ SEED_LIMIT = 40
 VIP_HOURS = 24
 
 # Translations
-# "key" : ["english", "french", "german", "brazilian-portuguese", "polish"]
+# "key" : ["english", "french", "german", "brazilian-portuguese", "polish", "spanish"]
 # ----------------------------------------------
 
 TRANSL = {
-    "nostatsyet": ["No stats yet", "Pas de stats", "noch keine Statistiken", "Sem estatísticas ainda", "Brak dostępnych statystyk"],
-    "allies": ["all", "all", "Allierte", "aliados", "Alianci"],
-    "axis": ["axi", "axe", "Achsenmächte", "eixo", "Oś"],
-    "best_players": ["Best players", "Meilleurs joueurs", "Beste Spieler", "Melhores jogadores", "Najlepsi gracze"],
-    "armycommander": ["Commander", "Commandant", "Kommandant", "Comandante", "Dowódca"],
-    "infantry": ["Infantry", "Infanterie", "Infanterie", "Infantaria", "Piechota"],
-    "tankers": ["Tankers", "Tankistes", "Panzerspieler", "Tanqueiros", "Czołgiści"],
-    "best_squads": ["Best squads", "Meilleures squads", "Beste Mannschaften", "Melhores esquadrões", "Najlepsze jednostki"],
-    "offense": ["attack", "attaque", "Angriff", "ataque", "Ofensywa"],
-    "defense": ["defense", "défense", "Verteidigung", "defesa", "Defensywa"],
-    "combat": ["combat", "combat", "Kampf", "combate", "Walka"],
-    "support": ["support", "soutien", "Unterstützung", "suporte", "Wsparcie"],
-    "ratio": ["ratio", "ratio", "Verhältnis", "proporção", "Średnia"],
-    "killrate": ["kills/min", "kills/min", "Kills/min", "abates/min", "Zabójstwa/min"],
-    "vip_until": ["VIP until", "VIP jusqu'au", "VIP bis", "VIP até", "VIP do"],
-    "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!", "Aktualnie ma VIPa!"],
-    "gamejustended": ["Game just ended", "Partie terminée", "Spiel beendet", "Jogo acabou", "Gra właśnie się zakończyła"],
-    "vip_at": ["at", "à", "um", "às", "do godziny"]
+    "nostatsyet": ["No stats yet", "Pas de stats", "noch keine Statistiken", "Sem estatísticas ainda", "Brak dostępnych statystyk", "Sin estadísticas aún"],
+    "allies": ["all", "all", "Allierte", "aliados", "Alianci", "Aliados"],
+    "axis": ["axi", "axe", "Achsenmächte", "eixo", "Oś", "Eje"],
+    "best_players": ["Best players", "Meilleurs joueurs", "Beste Spieler", "Melhores jogadores", "Najlepsi gracze", "Mejores jugadores"],
+    "armycommander": ["Commander", "Commandant", "Kommandant", "Comandante", "Dowódca", "Comandante"],
+    "infantry": ["Infantry", "Infanterie", "Infanterie", "Infantaria", "Piechota", "Infantería"],
+    "tankers": ["Tankers", "Tankistes", "Panzerspieler", "Tanqueiros", "Czołgiści", "Tanquistas"],
+    "best_squads": ["Best squads", "Meilleures squads", "Beste Mannschaften", "Melhores esquadrões", "Najlepsze jednostki", "Mejores escuadras"],
+    "offense": ["attack", "attaque", "Angriff", "ataque", "Ofensywa", "Ataque"],
+    "defense": ["defense", "défense", "Verteidigung", "defesa", "Defensywa", "Defensa"],
+    "combat": ["combat", "combat", "Kampf", "combate", "Walka", "Combate"],
+    "support": ["support", "soutien", "Unterstützung", "suporte", "Wsparcie", "Apoyo"],
+    "ratio": ["ratio", "ratio", "Verhältnis", "proporção", "Średnia", "Ratio"],
+    "killrate": ["kills/min", "kills/min", "Kills/min", "abates/min", "Zabójstwa/min", "bajas/min"],
+    "vip_until": ["VIP until", "VIP jusqu'au", "VIP bis", "VIP até", "VIP do", "VIP hasta"],
+    "already_vip": ["Already VIP !", "Déjà VIP !", "bereits VIP !", "Já é VIP!", "Aktualnie ma VIPa!", "¡Ya es VIP!"],
+    "gamejustended": ["Game just ended", "Partie terminée", "Spiel beendet", "Jogo acabou", "Gra właśnie się zakończyła", "La partida terminó"],
+    "vip_at": ["at", "à", "um", "às", "do godziny", "a las"]
 }
 
 # VIP announce : local time
 # Find you local timezone : https://utctime.info/timezone/
-LOCAL_TIMEZONE = "Europe/Paris"
+LOCAL_TIMEZONE = "America/Argentina/Buenos_Aires"
 LOCAL_TIME_FORMAT = f"%d/%m/%Y {TRANSL['vip_at'][LANG]} %Hh%M"
 
 # Discord
