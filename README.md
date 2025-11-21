@@ -6,11 +6,12 @@ that displays and rewards top players, based on their scores.
 ![375489308-67943815-da9c-41ff-988c-eaaa2e0e64c2](https://github.com/user-attachments/assets/e44d0f07-23a8-4f62-87c4-742803c8be06)
 
 ## Features
-- You can enable/disable the script on the different servers managed in CRCON.
+- Enable/disable the script on the different servers managed in CRCON.
 - Message can be called anytime with `!top` chat command (configurable).
 - Message will be displayed to all players at game's end.
-- You can choose to give VIPs at game's end (you can define the number of top players that will receive one, and it's duration).
-- You can send the report in a Discord channel
+- Choose to give VIPs at game's end (you can define the number of top players that will receive one, and it's duration).
+- Send the report in a Discord channel.
+- Available in english, french, german, brazilian portuguese, polish and spanish.
 
 ## Observed scores
 
