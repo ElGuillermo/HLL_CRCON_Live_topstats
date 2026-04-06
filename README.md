@@ -46,13 +46,13 @@ rather than for their individual stats.
   ```shell
   cd /root/hll_rcon_tool
 
-  wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_restart/refs/heads/main/restart.sh
+  wget -O https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_restart/refs/heads/main/restart.sh
 
-  mkdir custom_tools
+  mkdir -p custom_tools
 
   cd /root/hll_rcon_tool/custom_tools
 
-  wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats.py
+  wget -O https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats.py
   ```
 
 - Modify CRCON files  
