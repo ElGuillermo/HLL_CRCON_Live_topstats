@@ -54,7 +54,7 @@ Doing so will ensure the teamplayers will enter the server more often than CODdi
   wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats.py
   ```
 
-- Modify CRCON files
+- Modify CRCON files  
   Edit `/root/hll_rcon_tool/rcon/hooks.py` and add these lines :  
   (in the import part, on top of the file)  
     ```python
