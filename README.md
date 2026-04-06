@@ -79,7 +79,7 @@ rather than for their individual stats.
   cd /root/hll_rcon_tool
   sh ./restart.sh
   ```
-  If you don't want to use `rester.sh`, you can rebuild containers and restart CRCON using Docker commands :  
+  If you don't want to use the `restart.sh` script, you can rebuild containers and restart CRCON using Docker commands :  
   ```shell
   cd /root/hll_rcon_tool
   sudo docker compose build && sudo docker compose down && sudo docker compose up -d --remove-orphans
