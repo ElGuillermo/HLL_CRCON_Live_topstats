@@ -28,7 +28,6 @@ ENABLE_ON_SERVERS = ["1"]
 # Calling from chat
 # ----------------------------------------
 
-# CHAT command
 CHAT_COMMAND = "!top"
 
 
@@ -39,7 +38,7 @@ CHAT_COMMAND = "!top"
 #   "players", "squads"
 # Available subcategories :
 #       "command", "infantry", "armor", "artillery", "recon"
-# Available stats in subcategories :
+# Available combined stats in subcategories :
 #           "teamplay" (combat score + support score * support bonus)
 #           "offdef"   (offense score + defense score * defense bonus)
 #           "kd"       (kills/deaths ratio)
@@ -54,6 +53,15 @@ CONFIG = {
             {"score": "teamplay", "limit": 1, "details": True, "vip": True}
         ],
         "infantry": [
+            # {"score": "combat", "limit": 3, "details": True, "vip": False},
+            # {"score": "offense", "limit": 3, "details": True, "vip": False},
+            # {"score": "defense", "limit": 3, "details": True, "vip": False},
+            # {"score": "support", "limit": 3, "details": True, "vip": False},
+            # {"score": "kills", "limit": 3, "details": True, "vip": False},
+            # {"score": "deaths", "limit": 3, "details": True, "vip": False},
+            # {"score": "team_kills", "limit": 3, "details": True, "vip": False},
+            # {"score": "vehicle_kills", "limit": 3, "details": True, "vip": False},
+            # {"score": "vehicles_destroyed", "limit": 3, "details": True, "vip": False},
             {"score": "teamplay", "limit": 3, "details": True, "vip": True},
             {"score": "offdef", "limit": 3, "details": True, "vip": True},
             {"score": "kd", "limit": 3, "details": True, "vip": False},
@@ -274,8 +282,80 @@ def give_xh_vip(rcon: Rcon, player_id: str, player_name: str, hours_awarded: int
     return f"{TRANSL['vip_until'][LANG]}\n{str(now_plus_xh_local_display)} !"
 
 
+def get_teamplay_score(player: dict) -> int:
+    """
+    (Players)
+    Calculates the teamplay score using combat and support stats.
+    Formula: combat + (support * SUPPORT_BONUS)
+    """
+
+    s_bonus = clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")
+
+    combat_score = int(player.get("combat", 0))
+    support_score = int(player.get("support", 0))
+
+    teamplay_score = combat_score + (support_score * s_bonus)
+
+    return int(teamplay_score)
+
+
+def get_offdef_score(player: dict) -> int:
+    """
+    (Players)
+    Calculates the combined offense and defense score.
+    Formula: offense + (defense * DEFENSE_BONUS)
+    """
+    d_bonus = clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")
+
+    offense = int(player.get("offense", 0))
+    defense = int(player.get("defense", 0))
+
+    return int(offense + (defense * d_bonus))
+
+
+def get_kd_ratio_score(player: dict) -> float:
+    """
+    (Players)
+    Calculates the kills/deaths ratio.
+    If deaths are 0, the ratio equals the number of kills.
+    """
+    kills = int(player.get("kills", 0))
+    deaths = int(player.get("deaths", 0))
+
+    if kills == 0:
+        return 0.0
+
+    if deaths == 0:
+        return float(kills)
+
+    ratio = kills / deaths
+
+    return round(float(ratio), 1)
+
+
+def get_killrate_score(player: dict) -> float:
+    """
+    (Players)
+    Calculates the kills per minute ratio.
+    If playtime is 0, the rate equals the number of kills.
+    """
+    kills = int(player.get("kills", 0))
+    playtime_min = int(player.get("map_playtime_seconds", 0)) / 60
+
+    if kills == 0:
+        return 0.0
+
+    if playtime_min == 0:
+        return float(kills)
+
+    rate = kills / playtime_min
+
+    return round(float(rate), 1)
+
+
 def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str, score_func, limit: int = 3, mention_details: bool = False, give_vip: bool = False) -> list:
     """
+    (Players)
     Extracts, ranks, and optionally triggers VIP rewards.
     """
     players_stats = []
@@ -365,75 +445,68 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
     return formatted_list
 
 
-def get_offdef_score(player: dict) -> int:
+def get_squad_teamplay_score(squad: dict) -> int:
     """
-    Calculates the combined offense and defense score.
-    Formula: offense + (defense * DEFENSE_BONUS)
+    (Squads)
+    Calculates combined teamplay score for a whole squad.
+    """
+    s_bonus = clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")
+    return int(squad.get("combat", 0) + (squad.get("support", 0) * s_bonus))
+
+
+def get_squad_offdef_score(squad: dict) -> int:
+    """
+    (Squads)
+    Calculates combined off/def score for a whole squad.
     """
     d_bonus = clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")
-
-    offense = int(player.get("offense", 0))
-    defense = int(player.get("defense", 0))
-
-    return int(offense + (defense * d_bonus))
+    return int(squad.get("offense", 0) + (squad.get("defense", 0) * d_bonus))
 
 
-def get_teamplay_score(player: dict) -> int:
+def get_squad_kd_score(squad: dict) -> float:
     """
-    Calculates the teamplay score using combat and support stats.
-    Formula: combat + (support * SUPPORT_BONUS)
+    (Squads)
+    Calculates the cumulative K/D ratio of all players in the squad.
     """
+    players = squad.get("players", [])
+    total_kills = sum(int(p.get("kills", 0)) for p in players)
+    total_deaths = sum(int(p.get("deaths", 0)) for p in players)
 
-    s_bonus = clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")
+    if total_kills == 0:
+        return 0.0
+    if total_deaths == 0:
+        return float(total_kills)
 
-    combat_score = int(player.get("combat", 0))
-    support_score = int(player.get("support", 0))
-
-    teamplay_score = combat_score + (support_score * s_bonus)
-
-    return int(teamplay_score)
+    return round(total_kills / total_deaths, 1)
 
 
-def get_kd_ratio_score(player: dict) -> float:
+def get_squad_killrate_score(squad: dict) -> float:
     """
-    Calculates the kills/deaths ratio.
-    If deaths are 0, the ratio equals the number of kills.
+    (Squads)
+    Calculates the squad killrate based on cumulative kills
+    divided by cumulative playtime of all members.
     """
-    kills = int(player.get("kills", 0))
-    deaths = int(player.get("deaths", 0))
-
-    if kills == 0:
+    players = squad.get("players", [])
+    if not players:
         return 0.0
 
-    if deaths == 0:
-        return float(kills)
+    total_kills = sum(int(p.get("kills", 0)) for p in players)
+    total_playtime_min = sum(int(p.get("map_playtime_seconds", 0)) for p in players) / 60
 
-    ratio = kills / deaths
-
-    return round(float(ratio), 1)
-
-
-def get_killrate_score(player: dict) -> float:
-    """
-    Calculates the kills per minute ratio.
-    If playtime is 0, the rate equals the number of kills.
-    """
-    kills = int(player.get("kills", 0))
-    playtime_min = int(player.get("map_playtime_seconds", 0)) / 60
-
-    if kills == 0:
+    if total_kills == 0:
         return 0.0
 
-    if playtime_min == 0:
-        return float(kills)
+    if total_playtime_min == 0:
+        return float(total_kills)
 
-    rate = kills / playtime_min
+    rate = total_kills / total_playtime_min
 
-    return round(float(rate), 1)
+    return round(float(rate), 2)  # Précision à 2 décimales car les chiffres seront plus petits
 
 
 def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3) -> list:
     """
+    (Squads)
     Ranks squads or the Commander unit.
     """
     squads_stats = []
@@ -469,61 +542,6 @@ def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3
 
     squads_stats.sort(key=lambda x: x["score"], reverse=True)
     return [f"{s['name']} : {s['score']}" for s in squads_stats[:limit]]
-
-
-def get_squad_offdef_score(squad: dict) -> int:
-    """
-    Calculates combined off/def score for a whole squad.
-    """
-    d_bonus = clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")
-    return int(squad.get("offense", 0) + (squad.get("defense", 0) * d_bonus))
-
-
-def get_squad_teamplay_score(squad: dict) -> int:
-    """
-    Calculates combined teamplay score for a whole squad.
-    """
-    s_bonus = clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")
-    return int(squad.get("combat", 0) + (squad.get("support", 0) * s_bonus))
-
-
-def get_squad_kd_score(squad: dict) -> float:
-    """
-    Calculates the cumulative K/D ratio of all players in the squad.
-    """
-    players = squad.get("players", [])
-    total_kills = sum(int(p.get("kills", 0)) for p in players)
-    total_deaths = sum(int(p.get("deaths", 0)) for p in players)
-
-    if total_kills == 0:
-        return 0.0
-    if total_deaths == 0:
-        return float(total_kills)
-
-    return round(total_kills / total_deaths, 1)
-
-
-def get_squad_killrate_score(squad: dict) -> float:
-    """
-    Calculates the squad killrate based on cumulative kills
-    divided by cumulative playtime of all members.
-    """
-    players = squad.get("players", [])
-    if not players:
-        return 0.0
-
-    total_kills = sum(int(p.get("kills", 0)) for p in players)
-    total_playtime_min = sum(int(p.get("map_playtime_seconds", 0)) for p in players) / 60
-
-    if total_kills == 0:
-        return 0.0
-
-    if total_playtime_min == 0:
-        return float(total_kills)
-
-    rate = total_kills / total_playtime_min
-
-    return round(float(rate), 2)  # Précision à 2 décimales car les chiffres seront plus petits
 
 
 def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
@@ -572,16 +590,27 @@ def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
     return "\n\n".join(report_sections)
 
 
-# Functions mapping (must be declared AFTER the functions def)
+# Functions mapping (must be declared AFTER the functions definitions)
 SCORE_FUNCTIONS = {
-    "teamplay": get_teamplay_score,
-    "offdef": get_offdef_score,
-    "kd": get_kd_ratio_score,
-    "killrate": get_killrate_score,
-    "squad_teamplay": get_squad_teamplay_score,
-    "squad_offdef": get_squad_offdef_score,
-    "squad_kd": get_squad_kd_score,
-    "squad_killrate": get_squad_killrate_score
+    # No need to create a dedicated function, as the stat is directly available from the 'get_team_view' endpoint
+    "combat": lambda p: int(p.get("combat", 0)),
+    "offense": lambda p: int(p.get("offense", 0)),
+    "defense": lambda p: int(p.get("defense", 0)),
+    "support": lambda p: int(p.get("support", 0)),
+    "kills": lambda p: int(p.get("kills", 0)),
+    "deaths": lambda p: int(p.get("deaths", 0)),
+    "team_kills": lambda p: int(p.get("team_kills", 0)),
+    "vehicle_kills": lambda p: int(p.get("vehicle_kills", 0)),
+    "vehicles_destroyed": lambda p: int(p.get("vehicles_destroyed", 0)),
+    # These are calculated stats, provided by dedicated functions
+    "teamplay": get_teamplay_score,              # combat + support * support_bonus
+    "offdef": get_offdef_score,                  # offense + defense * defense bonus
+    "kd": get_kd_ratio_score,                    # kills / deaths
+    "killrate": get_killrate_score,              # kills / minute
+    "squad_teamplay": get_squad_teamplay_score,  # combat + support * support_bonus
+    "squad_offdef": get_squad_offdef_score,      # offense + defense * defense bonus
+    "squad_kd": get_squad_kd_score,              # kills / deaths
+    "squad_killrate": get_squad_killrate_score   # kills / minute
 }
 
 
