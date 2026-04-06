@@ -15,6 +15,21 @@ that displays and rewards top players, based on their scores.
 
 ## Observed scores
 
+This new version (April 6, 2024) allows you to choose :  
+- players/squads to be observed :  
+  commander, infantry, armo, artillery, recon  
+- stats or stats combination to be calculated :  
+  (any available stat from `get_team_view` CRCON API endpoint can be mapped)
+
+The script comes with default (usual) settings :  
+- players :
+  - commander : combat + support
+  - infantry : combat + support, offense + defense, kills/deaths ratio, killrate
+- squads :
+  - infantry : combat + support, offense + defense
+  - armor : combat + support
+  - artillery : combat + support
+  - recon : combat + support
 
 A multiplier bonus can be given to defense and support scores, if you want to reward teamplay more than individual skills.  
 Doing so will ensure the teamplayers will enter the server more often than CODdies.
