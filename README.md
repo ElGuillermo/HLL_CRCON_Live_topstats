@@ -17,7 +17,7 @@ that displays and rewards top players, based on their scores.
 
 This new version (April 6, 2024) allows you to choose :  
 - players/squads to be observed :  
-  - commander, infantry, armo, artillery, recon  
+  - commander, infantry, armor, artillery, recon  
 - stats or stats combination to be calculated :  
   - (any available stat from `get_team_view` CRCON API endpoint can be mapped)
 
