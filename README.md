@@ -31,8 +31,9 @@ The script comes with default (usual) settings :
   - artillery : combat + support
   - recon : combat + support
 
-A multiplier bonus can be given to defense and support scores, if you want to reward teamplay more than individual skills.  
-Doing so will ensure the teamplayers will enter the server more often than CODdies.
+A multiplier bonus can be given to defense and support scores,  
+to reward first and foremost the players who play for the team  
+rather than for their individual stats.
 
 ## Install
 
