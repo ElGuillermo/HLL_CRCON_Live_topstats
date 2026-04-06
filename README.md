@@ -11,7 +11,7 @@ that displays and rewards top players, based on their scores.
 - Message will be displayed to all players at game's end.
 - Choose to give VIPs at game's end (you can define the number of top players that will receive one, and it's duration).
 - Send the report in a Discord channel.
-- Available translations : english, french, spanish, german, rusian, brazilian portuguese, polish, spanish and chinese.
+- Available translations : english, french, spanish, german, russian, brazilian portuguese, polish, spanish and chinese.
 
 ## Observed scores
 
