@@ -79,6 +79,11 @@ rather than for their individual stats.
   cd /root/hll_rcon_tool
   sh ./restart.sh
   ```
+  (You can rebuild containers and restart CRCON using direct Docker commands)  
+  ```
+  cd /root/hll_rcon_tool
+  sudo docker compose build && sudo docker compose down && sudo docker compose up -d --remove-orphans
+  ```
 
 ## Limitations
 ⚠️ Any change to these files requires a CRCON rebuild and restart (using the `restart.sh` script) to be taken in account :
