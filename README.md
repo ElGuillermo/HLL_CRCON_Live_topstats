@@ -15,7 +15,7 @@ that displays and rewards top players, based on their scores.
 
 ## Observed scores
 
-This new version (April 6, 2024) allows you to choose :  
+This new version (April 6, 2026) allows you to choose :  
 - players/squads to be observed :  
   - commander, infantry, armor, artillery, recon  
 - stats or stats combination to be calculated :  
