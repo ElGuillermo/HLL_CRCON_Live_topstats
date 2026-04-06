@@ -39,7 +39,7 @@ Doing so will ensure the teamplayers will enter the server more often than CODdi
 > [!NOTE]
 > The shell commands given below assume your CRCON is installed in `/root/hll_rcon_tool`.  
 
-- Log into your CRCON host machine using SSH and enter these commands (one line at at time) :  
+- Log into your CRCON host machine using SSH
 
 - Download the tool (enter these commands, one line at a time)  
   ```shell
