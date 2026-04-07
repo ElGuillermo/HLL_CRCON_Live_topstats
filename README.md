@@ -13,6 +13,9 @@ that displays and rewards top players, based on their scores.
 - Award VIPs at endgame : choose the duration and the number of winners.
 - Endgame stats can be sent in a Discord channel.
 - Available translations : english, french, spanish, german, russian, brazilian portuguese, polish and chinese.
+- A multiplier bonus can be given to defense and support scores,  
+  to reward first and foremost the players who play for the team  
+  rather than for their individual stats.
 
 ## Observed scores
 
@@ -31,10 +34,6 @@ The script comes with default (usual) settings :
   - armor : combat + support
   - artillery : combat + support
   - recon : combat + support
-
-A multiplier bonus can be given to defense and support scores,  
-to reward first and foremost the players who play for the team  
-rather than for their individual stats.
 
 ## Install
 
