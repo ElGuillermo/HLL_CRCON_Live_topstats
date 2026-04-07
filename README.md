@@ -25,15 +25,26 @@ This new version (April 6, 2026) allows you to choose :
 - stats or stats combination to be calculated :  
   - (any available stat from `get_team_view` CRCON API endpoint can be mapped or combined)
 
-The script comes with default (usual) settings :  
+### The script comes with default (usual) settings :  
+
 - players :
-  - commander : combat + support
-  - infantry : combat + support, offense + defense, kills/deaths ratio, killrate
+  - commander :
+    - combat + support
+  - infantry :
+    - combat + support
+    - offense + defense
+    - kills/deaths ratio
+    - killrate
 - squads :
-  - infantry : combat + support, offense + defense
-  - armor : combat + support
-  - artillery : combat + support
-  - recon : combat + support
+  - infantry :
+    - combat + support
+    - offense + defense
+  - armor :
+    - combat + support
+  - artillery :
+    - combat + support
+  - recon :
+    - combat + support
 
 ## Install
 
