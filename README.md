@@ -1,6 +1,6 @@
 # HLL_CRCON_Live_topstats
 
-A plugin for Hell Let Loose (HLL) CRCON (see : https://github.com/MarechJ/hll_rcon_tool)
+A plugin for Hell Let Loose (HLL) CRCON (see : https://github.com/MarechJ/hll_rcon_tool)  
 that displays and rewards top players and squads, based on their scores.
 
 <img width="3820" height="989" alt="image" src="https://github.com/user-attachments/assets/48567532-d5cb-4bfb-8442-d9809a3e9f22" />
