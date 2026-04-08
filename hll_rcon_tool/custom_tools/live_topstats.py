@@ -696,7 +696,7 @@ def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
 
             if results:
                 if not players_header_added:
-                    report_sections.append(f"--- {TRANSL['top_players'][LANG].upper()} ---")
+                    report_sections.append(f"——— {TRANSL['top_players'][LANG].upper()} ———")
                     players_header_added = True
 
                 header = f"▒ TOP {r['limit']} {TRANSL[unit_type.lower()][LANG].capitalize()} ({r['score'].lower()})"  # TODO translate r['score']
@@ -717,7 +717,7 @@ def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
 
             if results:
                 if not squads_header_added:
-                    report_sections.append(f"--- {TRANSL['top_squads'][LANG].upper()} ---")
+                    report_sections.append(f"——— {TRANSL['top_squads'][LANG].upper()} ———")
                     squads_header_added = True
 
                 header = f"▒ TOP {r['limit']} {TRANSL[unit_type.lower()][LANG].capitalize()} ({r['score'].lower()})"  # TODO translate r['score']
