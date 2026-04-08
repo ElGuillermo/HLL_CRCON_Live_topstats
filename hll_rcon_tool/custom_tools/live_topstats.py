@@ -39,7 +39,7 @@ CHAT_COMMAND = "!top"
 CONFIG = {
     "players": {
         "armycommander": [
-            {"score": "teamplay", "limit": 2, "details": True, "vip": True}
+            {"score": "teamplay", "limit": 2, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
         ],
         "infantry": [
             # {"score": "combat", "limit": 3, "details": True, "vip": False},
@@ -58,9 +58,15 @@ CONFIG = {
             {"score": "kd", "limit": 3, "details": True, "vip": False},  # kills / deaths
             {"score": "kpm", "limit": 3, "details": True, "vip": False}  # kills per minute
         ],
-        "armor": [],
-        "artillery": [],
-        "recon": [],
+        "armor": [
+            # add any stat using the templates above
+        ],
+        "artillery": [
+            # add any stat using the templates above
+        ],
+        "recon": [
+            # add any stat using the templates above
+        ],
     },
     "squads": {
         "infantry": [
