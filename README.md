@@ -3,7 +3,7 @@
 A plugin for Hell Let Loose (HLL) CRCON (see : https://github.com/MarechJ/hll_rcon_tool)
 that displays and rewards top players, based on their scores.
 
-![375489308-67943815-da9c-41ff-988c-eaaa2e0e64c2](https://github.com/user-attachments/assets/e44d0f07-23a8-4f62-87c4-742803c8be06)
+<img width="3820" height="989" alt="image" src="https://github.com/user-attachments/assets/48567532-d5cb-4bfb-8442-d9809a3e9f22" />
 
 ## Features
 - Select the stats and number of players you want to display
