@@ -41,6 +41,7 @@ This new version (April 6, 2026) allows you to choose :
     - offdef (offense + defense * bonus)
   - armor :
     - teamplay (combat + support * bonus)
+    - vehicles_destroyed
   - artillery :
     - teamplay (combat + support * bonus)
   - recon :
