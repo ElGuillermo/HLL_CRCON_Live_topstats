@@ -29,22 +29,22 @@ This new version (April 6, 2026) allows you to choose :
 
 - players :
   - commander :
-    - combat + support
+    - teamplay (combat + support * bonus)
   - infantry :
-    - combat + support
-    - offense + defense
+    - teamplay (combat + support * bonus)
+    - offdef (offense + defense * bonus)
     - kills/deaths ratio
     - killrate
 - squads :
   - infantry :
-    - combat + support
-    - offense + defense
+    - teamplay (combat + support * bonus)
+    - offdef (offense + defense * bonus)
   - armor :
-    - combat + support
+    - teamplay (combat + support * bonus)
   - artillery :
-    - combat + support
+    - teamplay (combat + support * bonus)
   - recon :
-    - combat + support
+    - teamplay (combat + support * bonus)
 
 ## Install
 
