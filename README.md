@@ -31,21 +31,21 @@ This new version (April 6, 2026) allows you to choose :
   - commander :
     - teamplay (combat + support * bonus)
   - infantry :
-    - teamplay (combat + support * bonus)
+    - teamplay
     - offdef (offense + defense * bonus)
     - kills/deaths ratio
     - killrate
 - squads :
   - infantry :
-    - teamplay (combat + support * bonus)
-    - offdef (offense + defense * bonus)
+    - teamplay
+    - offdef
   - armor :
-    - teamplay (combat + support * bonus)
+    - teamplay
     - vehicles_destroyed
   - artillery :
-    - teamplay (combat + support * bonus)
+    - teamplay
   - recon :
-    - teamplay (combat + support * bonus)
+    - teamplay
 
 ## Install
 
