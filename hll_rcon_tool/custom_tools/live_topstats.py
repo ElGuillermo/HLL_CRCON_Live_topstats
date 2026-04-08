@@ -97,7 +97,7 @@ CONFIG = {
     }
 }
 
-# Offense + defense score (offense + defense * bonus)
+# offdef defense bonus (offense + defense * bonus)
 # ie : 1.5  = defense counts 1.5x more than offense (defense bonus)
 #      1    = bonus disabled
 #      0.67 = offense counts 1.5x more than defense (defense malus)
@@ -106,7 +106,7 @@ CONFIG = {
 # Any negative value will be converted to positive (ie : -1.5 -> 1.5)
 DEFENSE_BONUS = 1.5
 
-# Teamplay (combat + support) score (combat + support * bonus)
+# teamplay support bonus (combat + support * bonus)
 SUPPORT_BONUS = 1.5
 
 
