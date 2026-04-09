@@ -39,7 +39,7 @@ CHAT_COMMAND = "!top"
 CONFIG = {
     "players": {
         "armycommander": [
-            {"score": "teamplay", "limit": 2, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
+            {"score": "player_teamplay", "limit": 2, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
         ],
         "infantry": [
             # {"score": "combat", "limit": 3, "details": True, "vip": False},
@@ -50,13 +50,13 @@ CONFIG = {
             # {"score": "support_bonus", "limit": 3, "details": True, "vip": False},  # support * SUPPORT_BONUS
             # {"score": "kills", "limit": 3, "details": True, "vip": False},
             # {"score": "deaths", "limit": 3, "details": True, "vip": False},
-            # {"score": "tks", "limit": 3, "details": True, "vip": False},
-            # {"score": "vehicle_kills", "limit": 3, "details": True, "vip": False},
-            # {"score": "vehicles_destroyed", "limit": 3, "details": True, "vip": False},
-            {"score": "teamplay", "limit": 3, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
-            {"score": "offdef", "limit": 3, "details": True, "vip": True},  # offense + defense * DEFENSE_BONUS
-            {"score": "kd", "limit": 3, "details": True, "vip": False},  # kills / deaths
-            {"score": "kpm", "limit": 3, "details": True, "vip": False}  # kills per minute
+            # {"score": "player_team_kills", "limit": 3, "details": True, "vip": False},
+            # {"score": "player_vehicle_kills", "limit": 3, "details": True, "vip": False},
+            # {"score": "player_vehicles_destroyed", "limit": 3, "details": True, "vip": False},
+            {"score": "player_teamplay", "limit": 3, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
+            {"score": "player_offdef", "limit": 3, "details": True, "vip": True},  # offense + defense * DEFENSE_BONUS
+            {"score": "player_kd", "limit": 3, "details": True, "vip": False},  # kills / deaths
+            {"score": "player_kpm", "limit": 3, "details": True, "vip": False}  # kills per minute
         ],
         "armor": [
             # add any stat using the templates above
@@ -69,6 +69,9 @@ CONFIG = {
         ],
     },
     "squads": {
+        "armycommander": [
+            # Prefer using the "armycommander" part in "players"
+        ],
         "infantry": [
             # {"score": "combat", "limit": 2},
             # {"score": "offense", "limit": 2},
@@ -78,6 +81,8 @@ CONFIG = {
             # {"score": "support_bonus", "limit": 2},
             # {"score": "kills", "limit": 2},
             # {"score": "deaths", "limit": 2},
+            # {"score": "squad_team_kills", "limit": 2},
+            # {"score": "squad_vehicle_kills", "limit": 2},
             # {"score": "squad_vehicles_destroyed", "limit": 2},
             {"score": "squad_teamplay", "limit": 2},
             {"score": "squad_offdef", "limit": 2},
@@ -179,50 +184,6 @@ TRANSL = {
     "top_squads": ["top squads", "top escouades", "top patrullas", "top trupps",
                    "топ отряды", "top esquadrões", "top składy", "顶级小队"],
 
-
-    # Teams
-    "allies": ["allies", "alliés", "aliados", "allierte",
-               "союзники", "aliados", "alianci", "盟军"],
-    "axis": ["axis", "axe", "eje", "achsenmächte",
-             "ось", "eixo", "oś", "轴心"],
-
-    # Unit types
-    # "armycommander": ["commander", "commandant", "comandante", "kommandant",
-    #                   "командующий", "comandante", "dowódca", "指挥官"],
-    "armycommander": ["cmd", "cdt", "cde", "kdt", "ком", "cmt", "dow", "指挥官"],
-    # "infantry": ["infantry", "infanterie", "infantería", "infanterie",
-    #              "пехота", "infantaria", "piechota", "步兵"],
-    "infantry": ["inf", "inf", "inf", "inf", "пех", "inf", "pie", "步兵"],
-    # "armor": ["armor", "blindés", "blindados", "panzer",
-    #           "танки", "blindados", "czołgi", "装甲"],
-    "armor": ["arm", "bli", "bli", "pz", "тнк", "bli", "czo", "装甲"],
-    # "artillery": ["artillery", "artillerie", "artillería", "artillerie",
-    #               "артиллерия", "artilharia", "artyleria", "火炮"],
-    "artillery": ["art", "art", "art", "art", "арт", "art", "art", "火炮"],
-    # "recon": ["recon", "reconnaissance", "reconocimiento", "aufklärer",
-    #           "разведка", "reconhecimento", "zwiad", "侦察"],
-    "recon": ["rec", "rec", "rec", "aufk", "разв", "rec", "zwi", "侦察"],
-
-
-    # Stat names
-    # "combat": ["combat", "combat", "combate", "Kampf",
-    #            "Бой", "combate", "Walka", "战斗"],
-    # "offense": ["attack", "attaque", "ataque", "Angriff",
-    #             "Атака", "ataque", "Ofensywa", "进攻"],
-    # "defense": ["defense", "défense", "defensa", "Verteidigung",
-    #             "Оборона", "defesa", "Defensywa", "防守"],
-    # "support": ["support", "soutien", "apoyo", "Unterstützung",
-    #             "Поддержка", "suporte", "Wsparcie", "支援"],
-    # kills
-    # deaths
-    # tks
-    # vehicle_kills
-    # vehicles_destroyed
-    # teamplay
-    # offdef
-    # "kd": ["K/D", "K/D", "K/D", "K/D", "К/Д", "K/D", "K/D", "K/D"],
-    # "kpm": ["kpm", "kpm", "b/min", "k/min", "у/мин", "a/min", "z/min", "击杀/分"],
-
     # VIP ingame message
     "vip_header": ["You are in the topstats!", "Tu es dans les topstats !",
                    "¡Estás en los topstats!", "Du bist in den Topstats!",
@@ -235,7 +196,47 @@ TRANSL = {
                 "Вы выиграли VIP до", "Você ganhou um VIP até",
                 "Wygrałeś VIP do", "你赢得了VIP，有效期至"],
     "vip_at": ["at", "à", "a las", "um",
-               "в", "às", "do godziny", "于"]
+               "в", "às", "do godziny", "于"],
+
+    # Teams
+    "allies": ["allies", "alliés", "aliados", "allierte",
+               "союзники", "aliados", "alianci", "盟军"],
+    "axis": ["axis", "axe", "eje", "achsenmächte",
+             "ось", "eixo", "oś", "轴心"],
+
+    # Units types
+    "armycommander": ["commander", "commandant", "comandante", "kommandant",
+                      "командующий", "comandante", "dowódca", "指挥官"],
+    "infantry": ["infantry", "infanterie", "infantería", "infanterie",
+                 "пехота", "infantaria", "piechota", "步兵"],
+    "armor": ["armor", "blindés", "blindados", "panzer",
+              "танки", "blindados", "czołgi", "装甲"],
+    "artillery": ["artillery", "artillerie", "artillería", "artillerie",
+                  "артиллерия", "artilharia", "artyleria", "火炮"],
+    "recon": ["recon", "reconnaissance", "reconocimiento", "aufklärer",
+              "разведка", "reconhecimento", "zwiad", "侦察"],
+
+    "armycommander_short": ["cmd", "cdt", "cde", "kdt", "ком", "cmt", "dow", "指挥官"],
+    # "infantry_short": ["inf", "inf", "inf", "inf", "пех", "inf", "pie", "步兵"],
+    # "armor_short": ["arm", "bli", "bli", "pz", "тнк", "bli", "czo", "装甲"],
+    # "artillery_short": ["art", "art", "art", "art", "арт", "art", "art", "火炮"],
+    # "recon_short": ["rec", "rec", "rec", "aufk", "разв", "rec", "zwi", "侦察"],
+
+    # Stats names (keys must match those in SCORE_FUNCTIONS)
+    "combat": ["cmb", "cmb", "cmb", "kpf", "бой", "cmb", "wal", "战斗"],
+    "offense": ["off", "off", "off", "ang", "атк", "off", "ofe", "进攻"],
+    "defense": ["def", "def", "def", "ver", "обр", "def", "def", "防守"],
+    "support": ["sup", "sou", "apo", "unt", "под", "sup", "wsp", "支援"],
+    "kills": ["kills", "kills", "bajas", "kills", "уб.", "abates", "zab.", "击杀"],
+    "deaths": ["deaths", "morts", "muertes", "tode", "см.", "mortes", "zgony", "死亡"],
+    # (keys below will be used for any "player_<key>" or "squad_<key>")
+    "team_kills": ["TK", "TK", "TK", "TK", "ТК", "TK", "TK", "队友击杀"],
+    "vehicle_kills": ["v.kills", "kills/véhic", "bajas/veh", "fzg.kills", "уб. тех.", "abates/veí", "zab. poj.", "载具击杀"],
+    "vehicles_destroyed": ["v.destr", "véhic.détru", "veh.destr.", "fzg.zen", "техн. унич", "veí.destru", "poj.znisz", "载具销毁"],
+    "teamplay": ["cmb+sup", "cmb+sup", "cmb+sup", "kpf+unt", "бой+под", "cmb+sup", "wal+wsp", "团队配合"],
+    "offdef": ["off+def", "off+def", "off+def", "off+def", "атк+обр", "off+def", "off+def", "攻防比"],
+    "kd": ["kills/deaths", "kills/morts", "kills/deaths", "kills/tode", "уб./см.", "kills/mortes", "zab./zgony", "KD比"],
+    "kpm": ["kills/min", "kills/min", "bajas/min", "kills/min", "уб./мин", "abates/min", "zab./min", "击杀/分"],
 }
 
 # Discord : embed author icon
@@ -355,7 +356,7 @@ def give_xh_vip(rcon: Rcon, player_id: str, player_name: str, hours_awarded: int
     return f"{header}\n\n{won_text}\n{date_str}, {at_text} {time_str} !"
 
 
-def get_teamplay_score(player: dict) -> int:
+def get_player_teamplay(player: dict) -> int:
     """
     Calculates the teamplay score using combat and support stats.
     Formula: combat + (support * SUPPORT_BONUS)
@@ -367,7 +368,7 @@ def get_teamplay_score(player: dict) -> int:
     return int(round(combat + (support * support_bonus)))
 
 
-def get_offdef_score(player: dict) -> int:
+def get_player_offdef(player: dict) -> int:
     """
     Calculates the combined offense and defense score.
     Formula: offense + (defense * DEFENSE_BONUS)
@@ -379,7 +380,7 @@ def get_offdef_score(player: dict) -> int:
     return int(round(offense + (defense * defense_bonus)))
 
 
-def get_kd_score(player: dict) -> float:
+def get_player_kd(player: dict) -> float:
     """
     Calculates the kills/deaths ratio.
     If deaths are 0, the ratio equals the number of kills.
@@ -393,7 +394,7 @@ def get_kd_score(player: dict) -> float:
     return round(kills / deaths, 2)
 
 
-def get_kpm_score(player: dict) -> float:
+def get_player_kpm(player: dict) -> float:
     """
     Calculates the kills per minute (KPM).
     Requires at least 1 minute of play to avoid aberrant ratios.
@@ -431,7 +432,7 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
                 if score and score > 0:
                     name = cmd["name"]
                     if mention_details:
-                        name = f"({TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander'][LANG].capitalize()}) {name}"
+                        name = f"({TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander_short'][LANG].capitalize()}) {name}"
                     players_stats.append({
                         "name": name,
                         "score": score,
@@ -505,7 +506,7 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
     return formatted_list
 
 
-def get_squad_teamplay_score(squad: dict) -> int:
+def get_squad_teamplay(squad: dict) -> int:
     """
     Calculates combined teamplay score for a whole squad.
     Formula: combat + (support * SUPPORT_BONUS)
@@ -517,7 +518,7 @@ def get_squad_teamplay_score(squad: dict) -> int:
     return int(round(combat + (support * support_bonus)))
 
 
-def get_squad_offdef_score(squad: dict) -> int:
+def get_squad_offdef(squad: dict) -> int:
     """
     Calculates combined off/def score for a whole squad.
     Formula: offense + (defense * DEFENSE_BONUS)
@@ -529,7 +530,7 @@ def get_squad_offdef_score(squad: dict) -> int:
     return int(round(offense + (defense * defense_bonus)))
 
 
-def get_squad_kd_score(squad: dict) -> float:
+def get_squad_kd(squad: dict) -> float:
     """
     Calculates the cumulative K/D ratio of all players in the squad.
     """
@@ -546,7 +547,7 @@ def get_squad_kd_score(squad: dict) -> float:
     return round(total_kills / total_deaths, 2)
 
 
-def get_squad_kpm_score(squad: dict) -> float:
+def get_squad_kpm(squad: dict) -> float:
     """
     Calculates the squad kills/min based on cumulative kills.
     Requires at least 10 minutes of cumulated playtime to avoid aberrant ratios.
@@ -569,7 +570,7 @@ def get_squad_kpm_score(squad: dict) -> float:
     return round(kpm, 2)
 
 
-def get_squad_vehicles_destroyed_score(squad: dict) -> int:
+def get_squad_vehicles_destroyed(squad: dict) -> int:
     """
     Calculates combined vehicles_destroyed for a whole squad.
     """
@@ -582,6 +583,36 @@ def get_squad_vehicles_destroyed_score(squad: dict) -> int:
         return 0
 
     return total_vehicles_destroyed
+
+
+def get_squad_team_kills(squad: dict) -> int:
+    """
+    Calculates combined team_kills for a whole squad.
+    """
+    players = squad.get("players", [])
+    if not players:
+        return 0
+
+    total_tks = sum(int(p.get("team_kills", 0)) for p in players)
+    if total_tks == 0:
+        return 0
+
+    return total_tks
+
+
+def get_squad_vehicle_kills(squad: dict) -> int:
+    """
+    Calculates combined vehicle_kills for a whole squad.
+    """
+    players = squad.get("players", [])
+    if not players:
+        return 0
+
+    total_vehicle_kills = sum(int(p.get("vehicle_kills", 0)) for p in players)
+    if total_vehicle_kills == 0:
+        return 0
+
+    return total_vehicle_kills
 
 
 def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3) -> list:
@@ -608,7 +639,7 @@ def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3
                     "support": cmd.get("support", 0)
                 }
                 score = score_func(fake_squad)
-                squads_stats.append({"name": f"{TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander'][LANG].capitalize()}", "score": score})
+                squads_stats.append({"name": f"{TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander_short'][LANG].capitalize()}", "score": score})
 
         # Squads
         else:
@@ -636,98 +667,87 @@ def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3
 
 # Functions mapping (must be declared AFTER the functions definitions)
 SCORE_FUNCTIONS = {
-    # No need to create a dedicated function, as the stat is directly available from the 'get_team_view' endpoint
-
     # (players and squads)
+    # No need to create a dedicated function, as the stat is directly available from the 'get_team_view' endpoint
     "combat": lambda p: int(p.get("combat", 0)),
     "offense": lambda p: int(p.get("offense", 0)),
     "defense": lambda p: int(p.get("defense", 0)),
-    "defense_bonus": lambda p: int(int(p.get("defense", 0)) * clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")),
     "support": lambda p: int(p.get("support", 0)),
-    "support_bonus": lambda p: int(int(p.get("support", 0)) * clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")),
     "kills": lambda p: int(p.get("kills", 0)),
     "deaths": lambda p: int(p.get("deaths", 0)),
-
-    # (players only)
-    "tks": lambda p: int(p.get("team_kills", 0)),
-    "vehicle_kills": lambda p: int(p.get("vehicle_kills", 0)),
-    "vehicles_destroyed": lambda p: int(p.get("vehicles_destroyed", 0)),
-
-    # These are calculated stats, provided by dedicated functions
+    # Directly calculated (no dedicated function)
+    "defense_bonus": lambda p: int(int(p.get("defense", 0)) * clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")),
+    "support_bonus": lambda p: int(int(p.get("support", 0)) * clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")),
 
     # (players)
-    "teamplay": get_teamplay_score,                                  # combat + support * support_bonus
-    "offdef": get_offdef_score,                                      # offense + defense * defense bonus
-    "kd": get_kd_score,                                              # kills / deaths
-    "kpm": get_kpm_score,                                            # kills / minute
+    # No need to create a dedicated function, as the stat is directly available from the 'get_team_view' endpoint
+    "player_team_kills": lambda p: int(p.get("team_kills", 0)),
+    "player_vehicle_kills": lambda p: int(p.get("vehicle_kills", 0)),
+    "player_vehicles_destroyed": lambda p: int(p.get("vehicles_destroyed", 0)),
+    # These are calculated stats, provided by dedicated functions
+    "player_teamplay": get_player_teamplay,                    # combat + support * support_bonus
+    "player_offdef": get_player_offdef,                        # offense + defense * defense bonus
+    "player_kd": get_player_kd,                                # kills / deaths
+    "player_kpm": get_player_kpm,                              # kills / minute
 
     # (squads)
-    # squad_tks  TODO
-    # squad_vehicle_kills  TODO
-    "squad_vehicles_destroyed": get_squad_vehicles_destroyed_score,  # cumulated vehicles_destroyed
-    "squad_teamplay": get_squad_teamplay_score,                      # combat + support * support_bonus
-    "squad_offdef": get_squad_offdef_score,                          # offense + defense * defense bonus
-    "squad_kd": get_squad_kd_score,                                  # kills / deaths
-    "squad_kpm": get_squad_kpm_score,                                # kills / minute
+    # These are calculated stats, provided by dedicated functions
+    "squad_team_kills": get_squad_team_kills,                  # cumulated team_kills
+    "squad_vehicle_kills": get_squad_vehicle_kills,            # cumulated vehicle_kills
+    "squad_vehicles_destroyed": get_squad_vehicles_destroyed,  # cumulated vehicles_destroyed
+    "squad_teamplay": get_squad_teamplay,                      # combat + support * support_bonus
+    "squad_offdef": get_squad_offdef,                          # offense + defense * defense bonus
+    "squad_kd": get_squad_kd,                                  # kills / deaths
+    "squad_kpm": get_squad_kpm,                                # kills / minute
 }
 
 
 def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
-    """
-    Orchestrates the report.
-    is_match_end: If True, allows VIP distribution based on config.
-    """
     server_status = rcon.get_status()
     report_sections = []
 
-    # Players
-    player_cfg = config.get("players", {})
-    players_header_added = False
+    def process_config_category(category_key, fetch_func, main_header_key):
+        cfg = config.get(category_key, {})
+        category_header_added = False
 
-    for unit_type, rankings in player_cfg.items():
-        for r in rankings:
-            # Should VIPs be granted ?
-            should_grant = is_match_end and r.get("vip", False)
+        for unit_type, rankings in cfg.items():
+            unit_header_added = False
 
-            results = get_player_ranking(
-                rcon,
-                server_status,
-                api_data,
-                unit_type,
-                SCORE_FUNCTIONS[r["score"]],
-                r["limit"],
-                r.get("details", False),
-                should_grant
-            )
+            for r in rankings:
+                should_grant = is_match_end and r.get("vip", False) if category_key == "players" else False
 
-            if results:
-                if not players_header_added:
-                    report_sections.append(f"——— {TRANSL['top_players'][LANG].upper()} ———")
-                    players_header_added = True
+                if category_key == "players":
+                    results = fetch_func(rcon, server_status, api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"], r.get("details", False), should_grant)
+                else:
+                    results = fetch_func(api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"])
 
-                header = f"▒ TOP {r['limit']} {TRANSL[unit_type.lower()][LANG].capitalize()} ({r['score'].lower()})"  # TODO translate r['score']
-                report_sections.append(f"{header}\n" + "\n".join(results))
+                if results:
+                    # "——— TOP PLAYERS ———"
+                    if not category_header_added:
+                        report_sections.append(f"——— {TRANSL[main_header_key][LANG].upper()} ———")
+                        category_header_added = True
 
-    # Squads
-    squad_cfg = config.get("squads", {})
-    squads_header_added = False
+                    # "— INFANTRY —"
+                    if not unit_header_added:
+                        unit_name = TRANSL.get(unit_type.lower(), [unit_type])[LANG].upper()
+                        report_sections.append(f"— {unit_name} —")
+                        unit_header_added = True
 
-    for unit_type, rankings in squad_cfg.items():
-        for r in rankings:
-            results = get_squad_ranking(
-                api_data,
-                unit_type,
-                SCORE_FUNCTIONS[r["score"]],
-                r["limit"]
-            )
+                    # stat function name translation
+                    # ex. "player_teamplay" or "squad_teamplay" -> use [TRANSL]["teamplay"] -> "cmb+sup"
+                    raw_score_key = r['score'].lower()
+                    clean_key = raw_score_key.removeprefix("player_").removeprefix("squad_")
+                    translations = TRANSL.get(clean_key)
+                    translated_score = translations[LANG].lower() if translations else raw_score_key
 
-            if results:
-                if not squads_header_added:
-                    report_sections.append(f"——— {TRANSL['top_squads'][LANG].upper()} ———")
-                    squads_header_added = True
+                    # Stat header
+                    header = f"▒ TOP {r['limit']} ({translated_score})"
 
-                header = f"▒ TOP {r['limit']} {TRANSL[unit_type.lower()][LANG].capitalize()} ({r['score'].lower()})"  # TODO translate r['score']
-                report_sections.append(header + "\n" + "\n".join(results))
+                    # Add stat section
+                    report_sections.append(f"{header}\n" + "\n".join(results))
+
+    process_config_category("players", get_player_ranking, "top_players")
+    process_config_category("squads", get_squad_ranking, "top_squads")
 
     return "\n\n".join(report_sections)
 
