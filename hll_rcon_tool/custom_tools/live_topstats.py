@@ -199,10 +199,13 @@ TRANSL = {
                "в", "às", "do godziny", "于"],
 
     # Teams
-    "allies": ["allies", "alliés", "aliados", "allierte",
-               "союзники", "aliados", "alianci", "盟军"],
-    "axis": ["axis", "axe", "eje", "achsenmächte",
-             "ось", "eixo", "oś", "轴心"],
+    # "allies": ["allies", "alliés", "aliados", "allierte",
+    #            "союзники", "aliados", "alianci", "盟军"],
+    # "axis": ["axis", "axe", "eje", "achsenmächte",
+    #          "ось", "eixo", "oś", "轴心"],
+
+    "allies": ["all", "all", "ali", "all", "соз", "ali", "ali", "盟军"],
+    "axis": ["axi", "axe", "eje", "ach", "ось", "eix", "oś", "轴心"],
 
     # Units types
     "armycommander": ["commander", "commandant", "comandante", "kommandant",
@@ -223,20 +226,36 @@ TRANSL = {
     # "recon_short": ["rec", "rec", "rec", "aufk", "разв", "rec", "zwi", "侦察"],
 
     # Stats names (keys must match those in SCORE_FUNCTIONS)
-    "combat": ["cmb", "cmb", "cmb", "kpf", "бой", "cmb", "wal", "战斗"],
-    "offense": ["off", "off", "off", "ang", "атк", "off", "ofe", "进攻"],
-    "defense": ["def", "def", "def", "ver", "обр", "def", "def", "防守"],
-    "support": ["sup", "sou", "apo", "unt", "под", "sup", "wsp", "支援"],
-    "kills": ["kills", "kills", "bajas", "kills", "уб.", "abates", "zab.", "击杀"],
-    "deaths": ["deaths", "morts", "muertes", "tode", "см.", "mortes", "zgony", "死亡"],
+    "combat": ["combat", "combat", "combate", "kampf", "боевой счет", "combate", "walka", "战斗"],
+    "offense": ["offensive", "offensive", "ofensiva", "offensiv", "атака", "ofensiva", "ofensywa", "进攻"],
+    "defense": ["defensive", "défensive", "defensiva", "defensiv", "оборона", "defensiva", "obrona", "防守"],
+    "support": ["support", "soutien", "apoyo", "unterstützung", "поддержка", "suporte", "wsparcie", "支援"],
+    "kills": ["kills", "kills", "bajas", "kills", "убийства", "abates", "zabójstwa", "击杀"],
+    "deaths": ["deaths", "morts", "muertes", "tode", "смерти", "mortes", "zgony", "死亡"],
+
+    # "combat_short": ["cmb", "cmb", "cmb", "kpf", "бой", "cmb", "wal", "战斗"],
+    # "offense_short": ["off", "off", "off", "ang", "атк", "off", "ofe", "进攻"],
+    # "defense_short": ["def", "def", "def", "ver", "обр", "def", "def", "防守"],
+    # "support_short": ["sup", "sou", "apo", "unt", "под", "sup", "wsp", "支援"],
+    # "kills_short": ["kills", "kills", "bajas", "kills", "уб.", "abates", "zab.", "击杀"],
+    # "deaths_short": ["deaths", "morts", "muertes", "tode", "см.", "mortes", "zgony", "死亡"],
+
     # (keys below will be used for any "player_<key>" or "squad_<key>")
-    "team_kills": ["TK", "TK", "TK", "TK", "ТК", "TK", "TK", "队友击杀"],
-    "vehicle_kills": ["v.kills", "kills/véhic", "bajas/veh", "fzg.kills", "уб. тех.", "abates/veí", "zab. poj.", "载具击杀"],
-    "vehicles_destroyed": ["v.destr", "véhic.détru", "veh.destr.", "fzg.zen", "техн. унич", "veí.destru", "poj.znisz", "载具销毁"],
-    "teamplay": ["cmb+sup", "cmb+sup", "cmb+sup", "kpf+unt", "бой+под", "cmb+sup", "wal+wsp", "团队配合"],
-    "offdef": ["off+def", "off+def", "off+def", "off+def", "атк+обр", "off+def", "off+def", "攻防比"],
-    "kd": ["kills/deaths", "kills/morts", "kills/deaths", "kills/tode", "уб./см.", "kills/mortes", "zab./zgony", "KD比"],
-    "kpm": ["kills/min", "kills/min", "bajas/min", "kills/min", "уб./мин", "abates/min", "zab./min", "击杀/分"],
+    "team_kills": ["team kills", "team kills", "team kills", "team kills", "убийства своих", "team kills", "team kills", "队友击杀"],
+    "vehicle_kills": ["vehicle kills", "kills véhicules", "bajas de vehículos", "fahrzeug kills", "убийства в технике", "abates de veículos", "zabójstwa w pojeździe", "载具击杀"],
+    "vehicles_destroyed": ["vehicles destroyed", "véhicules détruits", "vehículos destruidos", "fahrzeuge zerstört", "техника уничтожена", "veículos destruídos", "pojazdy zniszczone", "载具销毁"],
+    "teamplay": ["combat + support", "combat + soutien", "combate + apoyo", "kampf + unterstützung", "бой + поддержка", "combate + apoio", "walka + wsparcie", "团队配合"],
+    "offdef": ["offensive + defensive", "attaque + défense", "ofensiva + defensiva", "offensiv + defensiv", "атака + оборона", "ofensiva + defensiva", "ataki + obrona", "攻防比"],
+    "kd": ["kills / deaths", "kills / morts", "kills / deaths", "kills / tode", "убийства / смерти", "kills / mortes", "zabójstwa / zgony", "KD比"],
+    "kpm": ["kills / minute", "kills / minute", "bajas / minuto", "kills / minute", "убийств / минуту", "abates / minuto", "zabójstwa / minutę", "击杀 / 分"],
+
+    # "team_kills_short": ["TK", "TK", "TK", "TK", "ТК", "TK", "TK", "队友击杀"],
+    # "vehicle_kills_short": ["v.kills", "kills/véhic", "bajas/veh", "fzg.kills", "уб. тех.", "abates/veí", "zab. poj.", "载具击杀"],
+    # "vehicles_destroyed_short": ["v.destr", "véhic.détru", "veh.destr.", "fzg.zen", "техн. унич", "veí.destru", "poj.znisz", "载具销毁"],
+    # "teamplay_short": ["cmb+sup", "cmb+sup", "cmb+sup", "kpf+unt", "бой+под", "cmb+sup", "wal+wsp", "团队配合"],
+    # "offdef_short": ["off+def", "off+def", "off+def", "off+def", "атк+обр", "off+def", "off+def", "攻防比"],
+    # "kd_short": ["kills/deaths", "kills/morts", "kills/deaths", "kills/tode", "уб./см.", "kills/mortes", "zab./zgony", "KD比"],
+    # "kpm_short": ["kills/min", "kills/min", "bajas/min", "kills/min", "уб./мин", "abates/min", "zab./min", "击杀/分"],
 }
 
 # Discord : embed author icon
@@ -430,9 +449,9 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
             if cmd:
                 score = score_func(cmd)
                 if score and score > 0:
-                    name = cmd["name"]
+                    name = cmd["name"][:30]  # [:30] avoids line returns
                     if mention_details:
-                        name = f"({TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander_short'][LANG].capitalize()}) {name}"
+                        name = f"({TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander_short'][LANG].capitalize()}) {name[:20]}"  # [:20] avoids line returns
                     players_stats.append({
                         "name": name,
                         "score": score,
@@ -448,14 +467,14 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
                     for p in s_info.get("players", []):
                         score = score_func(p)
                         if score and score > 0:
-                            name = p["name"]
+                            name = p["name"][:30]
                             if mention_details:
-                                name = f"({TRANSL[side][LANG].capitalize()}/{s_name[0].upper()}) {name}"
+                                name = f"({TRANSL[side][LANG].capitalize()}/{s_name[0].upper()}) {name[:20]}"
                             players_stats.append({
                                 "name": name,
                                 "score": score,
                                 "player_id": p.get("player_id"),
-                                "raw_data": p  # Allows checkings in VIP part
+                                "raw_data": p
                             })
 
     players_stats.sort(key=lambda x: x["score"], reverse=True)
@@ -648,7 +667,7 @@ def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3
                 if s_name != "unassigned" and str(s_info.get("type")).lower() == unit_type.lower():
                     score = score_func(s_info)
                     if score and score > 0:
-                        name = f"{TRANSL[side][LANG].capitalize()}/{s_name[0].upper()}"  # Axe/A
+                        name = f"{TRANSL[side][LANG].capitalize()}/{s_name[0].upper()}"
                         squads_stats.append({
                             "name": name,
                             "score": score
@@ -709,45 +728,55 @@ def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
     def process_config_category(category_key, fetch_func, main_header_key):
         cfg = config.get(category_key, {})
         category_header_added = False
+        category_lines = []
 
         for unit_type, rankings in cfg.items():
-            unit_header_added = False
-
+            valid_results = []
             for r in rankings:
                 should_grant = is_match_end and r.get("vip", False) if category_key == "players" else False
-
                 if category_key == "players":
-                    results = fetch_func(rcon, server_status, api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"], r.get("details", False), should_grant)
+                    data = fetch_func(rcon, server_status, api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"], r.get("details", False), should_grant)
                 else:
-                    results = fetch_func(api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"])
+                    data = fetch_func(api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"])
+                if data:
+                    valid_results.append((r, data))
 
-                if results:
-                    # "——— TOP PLAYERS ———"
-                    if not category_header_added:
-                        report_sections.append(f"——— {TRANSL[main_header_key][LANG].upper()} ———")
-                        category_header_added = True
+            if valid_results:
+                if not category_header_added:
+                    title = TRANSL[main_header_key][LANG].upper()
+                    category_lines.append(f"— {title} —")
+                    category_header_added = True
 
-                    # "— INFANTRY —"
-                    if not unit_header_added:
-                        unit_name = TRANSL.get(unit_type.lower(), [unit_type])[LANG].upper()
-                        report_sections.append(f"— {unit_name} —")
-                        unit_header_added = True
+                unit_name = TRANSL.get(unit_type.lower(), [unit_type])[LANG].capitalize()
+                category_lines.append(f"└ {unit_name}")
 
-                    # stat function name translation
-                    # ex. "player_teamplay" or "squad_teamplay" -> use [TRANSL]["teamplay"] -> "cmb+sup"
+                for i, (r, results) in enumerate(valid_results):
                     raw_score_key = r['score'].lower()
                     clean_key = raw_score_key.removeprefix("player_").removeprefix("squad_")
                     translations = TRANSL.get(clean_key)
-                    translated_score = translations[LANG].lower() if translations else raw_score_key
+                    stat_label = translations[LANG].capitalize() if translations else clean_key.capitalize()
 
-                    # Stat header
-                    header = f"▒ TOP {r['limit']} ({translated_score})"
+                    is_last_stat = (i == len(valid_results) - 1)
+                    # branch = " └" if is_last_stat else " ├"
+                    branch = " ├" if is_last_stat else " ├"
+                    # branch = " ┌" if is_last_stat else " ┌"
 
-                    # Add stat section
-                    report_sections.append(f"{header}\n" + "\n".join(results))
+                    category_lines.append(f"{branch} {stat_label}")
 
-    process_config_category("players", get_player_ranking, "top_players")
-    process_config_category("squads", get_squad_ranking, "top_squads")
+                    # pipe = "  ·" if is_last_stat else " │ ·"
+                    pipe = " │ ·" if is_last_stat else " │ ·"
+                    for line in results:
+                        category_lines.append(f"{pipe} {line}")
+
+        return category_lines
+
+    player_lines = process_config_category("players", get_player_ranking, "top_players")
+    squad_lines = process_config_category("squads", get_squad_ranking, "top_squads")
+
+    if player_lines:
+        report_sections.append("\n".join(player_lines))
+    if squad_lines:
+        report_sections.append("\n".join(squad_lines))
 
     return "\n\n".join(report_sections)
 
