@@ -105,9 +105,9 @@ This new version (April 6, 2026) allows you to choose :
 
 ## Limitations
 ⚠️ Any change to these files requires a CRCON rebuild and restart to be taken in account :
-- `/root/hll_rcon_tool/custom_tools/common_translations.py`
 - `/root/hll_rcon_tool/custom_tools/live_topstats.py`
 - `/root/hll_rcon_tool/custom_tools/live_topstats_config.py`
+- `/root/hll_rcon_tool/custom_tools/common_translations.py`
 - `/root/hll_rcon_tool/rcon/hooks.py`
 
 ⚠️ This plugin requires a modification of the `/root/hll_rcon_tool/rcon/hooks.py` file, which originates from the official CRCON depot.  
