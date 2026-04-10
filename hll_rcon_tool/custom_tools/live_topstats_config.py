@@ -30,7 +30,7 @@ CHAT_COMMAND = "!top"
 # Stats to display
 # ----------------------------------------
 # Define the stats to observe for each players and squads types
-# (see all available stats in example config below)
+#   (see all available stats in example config below)
 # Parameters :
 #   (players & squads) "limit"                : number of top players/squads to be listed
 #   (players only)     "details" (True/False) : choose to display the (team/squad first letter) before the name of the player. ex : "(Axis/C) Playername"
@@ -107,38 +107,40 @@ STATS_TO_DISPLAY = {
 #      0.67 = offense counts 1.5x more than defense (defense malus)
 #      0.5  = offense counts 2x more than defense (defense malus)
 #      0    = bonus disabled
-# Any negative value will be converted to positive (ie : -1.5 -> 1.5)
+# Any negative value will be considered as positive (ie : -1.5 -> 1.5)
 DEFENSE_BONUS = 1.5
 
 # teamplay support bonus (combat + support * bonus)
 SUPPORT_BONUS = 1.5
 
 
-# VIP (only given at the end of a game)
+# VIP (only given to players at the end of a game)
 # ----------------------------------------
 
-# Give VIP the best nth top players in each VIP-enabled subcategory ("armycommander", "infantry", "armor", "artillery", "recon") :
-# 1 = gives a VIP to the top #1 player
-# 2 = gives a VIP to the top #1 and #2 players
-# 0 = disabled
+# Give VIP the best nth top players in each VIP-enabled players subcategory ("armycommander", "infantry", "armor", "artillery", "recon") :
+# ie : 1 = gives a VIP to the top #1 player
+#      2 = gives a VIP to the top #1 and #2 players
+#      0 = disabled (no VIP given)
 VIP_WINNERS = 1
 
 # Don't give a VIP to an "entered at last second" commander
 VIP_COMMANDER_MIN_PLAYTIME_MINS = 20
 VIP_COMMANDER_MIN_SUPPORT_SCORE = 1000
 
-# VIPs will be given if there is at least this number of players ingame
-# 0 to disable (VIP will always be given)
+# Give VIP if there is at least this number of players ingame
+# 0 = disabled (VIP will always be given)
 # Recommended : the same number as your seed limit
 SEED_LIMIT = 40
 
-# How many VIP hours awarded ?
+# How many VIP hours should be given ?
 # (If the player already has a VIP that ends AFTER this delay, VIP won't be given)
 GRANTED_VIP_HOURS = 24
 
-# VIP announce : local time
-# ex : "Europe/Berlin", "Asia/Shanghai"
+# VIP message : local time in expiration date/hour
 # Find you local timezone : https://utctime.info/timezone/
+# ie : "Europe/Berlin"
+#      "Asia/Shanghai"
+# default : "Etc/UTC"
 LOCAL_TIMEZONE = "Etc/UTC"
 
 
