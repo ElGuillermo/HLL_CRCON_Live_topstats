@@ -9,288 +9,72 @@ Source : https://github.com/ElGuillermo
 Feel free to use/modify/distribute, as long as you keep this note in your code
 """
 
-# Configuration (you should review/change these !)
-# -----------------------------------------------------------------------------
-
-# Translations
-# Available : 0 english, 1 french,  2 spanish,
-#             3 german,  4 russian, 5 brazilian portuguese,
-#             6 polish,  7 chinese
-LANG = 0
-
-# Can be enabled/disabled on your different game servers
-# ie : ["1"]           = enabled only on server 1
-#      ["1", "2"]      = enabled on servers 1 and 2
-#      ["2", "4", "5"] = enabled on servers 2, 4 and 5
-ENABLE_ON_SERVERS = ["1"]
-
-# Calling from chat
-CHAT_COMMAND = "!top"
-
-
-# Stats to observe
-# ----------------------------------------
-# Define the stats to observe for each players and squads types
-# (see all available stats in example config below)
-# Parameters :
-#   (players & squads) "limit"                : number of top players/squads to be listed
-#   (players only)     "details" (True/False) : choose to display the (team/squad first letter) before the name of the player. ex : "(Axis/C) Playername"
-#   (players only)     "vip"     (True/False) : choose to give a VIP to the first VIP_WINNERS players (configure this number below)
-CONFIG = {
-    "players": {
-        "armycommander": [
-            {"score": "player_teamplay", "limit": 2, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
-        ],
-        "infantry": [
-            # {"score": "combat", "limit": 3, "details": True, "vip": False},
-            # {"score": "offense", "limit": 3, "details": True, "vip": False},
-            # {"score": "defense", "limit": 3, "details": True, "vip": False},
-            # {"score": "defense_bonus", "limit": 3, "details": True, "vip": False},  # defense * DEFENSE_BONUS
-            # {"score": "support", "limit": 3, "details": True, "vip": False},
-            # {"score": "support_bonus", "limit": 3, "details": True, "vip": False},  # support * SUPPORT_BONUS
-            # {"score": "kills", "limit": 3, "details": True, "vip": False},
-            # {"score": "deaths", "limit": 3, "details": True, "vip": False},
-            # {"score": "player_team_kills", "limit": 3, "details": True, "vip": False},
-            # {"score": "player_vehicle_kills", "limit": 3, "details": True, "vip": False},
-            # {"score": "player_vehicles_destroyed", "limit": 3, "details": True, "vip": False},
-            {"score": "player_teamplay", "limit": 3, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
-            {"score": "player_offdef", "limit": 3, "details": True, "vip": True},  # offense + defense * DEFENSE_BONUS
-            {"score": "player_kd", "limit": 3, "details": True, "vip": False},  # kills / deaths
-            {"score": "player_kpm", "limit": 3, "details": True, "vip": False}  # kills per minute
-        ],
-        "armor": [
-            # add any stat using the templates above
-        ],
-        "artillery": [
-            # add any stat using the templates above
-        ],
-        "recon": [
-            # add any stat using the templates above
-        ],
-    },
-    "squads": {
-        "armycommander": [
-            # Prefer using the "armycommander" part in "players"
-        ],
-        "infantry": [
-            # {"score": "combat", "limit": 2},
-            # {"score": "offense", "limit": 2},
-            # {"score": "defense", "limit": 2},
-            # {"score": "defense_bonus", "limit": 2},
-            # {"score": "support", "limit": 2},
-            # {"score": "support_bonus", "limit": 2},
-            # {"score": "kills", "limit": 2},
-            # {"score": "deaths", "limit": 2},
-            # {"score": "squad_team_kills", "limit": 2},
-            # {"score": "squad_vehicle_kills", "limit": 2},
-            # {"score": "squad_vehicles_destroyed", "limit": 2},
-            {"score": "squad_teamplay", "limit": 2},
-            {"score": "squad_offdef", "limit": 2},
-            # {"score": "squad_kd", "limit": 2},
-            # {"score": "squad_kpm", "limit": 2},
-        ],
-        "armor": [
-            {"score": "squad_teamplay", "limit": 2},
-            {"score": "squad_vehicles_destroyed", "limit": 2},
-        ],
-        "artillery": [
-            {"score": "squad_teamplay", "limit": 2}
-        ],
-        "recon": [
-            {"score": "squad_teamplay", "limit": 2}
-        ]
-    }
-}
-
-# offdef defense bonus (offense + defense * bonus)
-# ie : 1.5  = defense counts 1.5x more than offense (defense bonus)
-#      1    = bonus disabled
-#      0.67 = offense counts 1.5x more than defense (defense malus)
-#      0.5  = offense counts 2x more than defense (defense malus)
-#      0    = bonus disabled
-# Any negative value will be converted to positive (ie : -1.5 -> 1.5)
-DEFENSE_BONUS = 1.5
-
-# teamplay support bonus (combat + support * bonus)
-SUPPORT_BONUS = 1.5
-
-
-# VIP (only given at the end of a game)
-# ----------------------------------------
-
-# Give VIP the best nth top players in each VIP-enabled subcategory ("armycommander", "infantry", "armor", "artillery", "recon") :
-# 1 = gives a VIP to the top #1 player
-# 2 = gives a VIP to the top #1 and #2 players
-# 0 = disabled
-VIP_WINNERS = 1
-
-# Don't give a VIP to an "entered at last second" commander
-VIP_COMMANDER_MIN_PLAYTIME_MINS = 20
-VIP_COMMANDER_MIN_SUPPORT_SCORE = 1000
-
-# VIPs will be given if there is at least this number of players ingame
-# 0 to disable (VIP will always be given)
-# Recommended : the same number as your seed limit
-SEED_LIMIT = 40
-
-# How many VIP hours awarded ?
-# (If the player already has a VIP that ends AFTER this delay, VIP won't be given)
-GRANTED_VIP_HOURS = 24
-
-# VIP announce : local time
-# ex : "Europe/Berlin", "Asia/Shanghai"
-# Find you local timezone : https://utctime.info/timezone/
-LOCAL_TIMEZONE = "Etc/UTC"
-
-
-# Discord
-# -------------------------------------
-
-# Dedicated Discord's channel webhook
-# (the script can run without any Discord output)
-# Syntax : ["webhook url", enabled (True/False)]
-DISCORD_CONFIG = [
-    ["https://discord.com/api/webhooks/...", False],  # Server 1
-    ["https://discord.com/api/webhooks/...", False],  # Server 2
-    ["https://discord.com/api/webhooks/...", False],  # Server 3
-    ["https://discord.com/api/webhooks/...", False],  # Server 4
-    ["https://discord.com/api/webhooks/...", False],  # Server 5
-    ["https://discord.com/api/webhooks/...", False],  # Server 6
-    ["https://discord.com/api/webhooks/...", False],  # Server 7
-    ["https://discord.com/api/webhooks/...", False],  # Server 8
-    ["https://discord.com/api/webhooks/...", False],  # Server 9
-    ["https://discord.com/api/webhooks/...", False]  # Server 10
-    # (you can add lines if you manage more than 10 servers)
-]
-
-
-# Miscellaneous (you don't need to change these)
-# -------------------------------------
-
-# Translations
-# "key" : ["english", "french", "spanish", "german", "russian", "brazilian-portuguese", "polish", "chinese"]
-TRANSL = {
-    # Messages, logs and Discord embeds
-    "gamejustended": ["Game just ended", "Partie terminée",
-                      "El juego acaba de terminar", "Spiel beendet",
-                      "Игра только что закончилась", "Jogo acabou",
-                      "Gra właśnie się zakończyła", "游戏刚刚结束"],
-    "nostatsyet": ["No stats yet", "Pas de stats",
-                   "Aún no hay estadísticas", "noch keine Statistiken",
-                   "Статистики пока нет", "Sem estatísticas ainda",
-                   "Brak dostępnych statystyk", "暂无统计数据"],
-    "top_players": ["top players", "top joueurs", "top jugadores", "top spieler",
-                    "топ игроки", "top jogadores", "top gracze", "顶级玩家"],
-    "top_squads": ["top squads", "top escouades", "top patrullas", "top trupps",
-                   "топ отряды", "top esquadrões", "top składy", "顶级小队"],
-
-    # VIP ingame message
-    "vip_header": ["You are in the topstats!", "Tu es dans les topstats !",
-                   "¡Estás en los topstats!", "Du bist in den Topstats!",
-                   "Вы попали в топ-стат!", "Você está nos topstats!",
-                   "Jesteś w topstats!", "你已进入 顶级统计！"],
-    "already_vip": ["Already VIP !", "Déjà VIP !", "¡Ya es VIP!", "bereits VIP !",
-                    "Уже VIP!", "Já é VIP!", "Aktualnie ma VIPa!", "已经是VIP！"],
-    "vip_won": ["You won a VIP until", "Tu as gagné un VIP jusqu'au",
-                "Has ganado un VIP hasta el", "Du hast ein VIP gewonnen bis",
-                "Вы выиграли VIP до", "Você ganhou um VIP até",
-                "Wygrałeś VIP do", "你赢得了VIP，有效期至"],
-    "vip_at": ["at", "à", "a las", "um",
-               "в", "às", "do godziny", "于"],
-
-    # Teams
-    # "allies": ["allies", "alliés", "aliados", "allierte",
-    #            "союзники", "aliados", "alianci", "盟军"],
-    # "axis": ["axis", "axe", "eje", "achsenmächte",
-    #          "ось", "eixo", "oś", "轴心"],
-
-    "allies": ["all", "all", "ali", "all", "соз", "ali", "ali", "盟军"],
-    "axis": ["axi", "axe", "eje", "ach", "ось", "eix", "oś", "轴心"],
-
-    # Units types
-    "armycommander": ["commander", "commandant", "comandante", "kommandant",
-                      "командующий", "comandante", "dowódca", "指挥官"],
-    "infantry": ["infantry", "infanterie", "infantería", "infanterie",
-                 "пехота", "infantaria", "piechota", "步兵"],
-    "armor": ["armor", "blindés", "blindados", "panzer",
-              "танки", "blindados", "czołgi", "装甲"],
-    "artillery": ["artillery", "artillerie", "artillería", "artillerie",
-                  "артиллерия", "artilharia", "artyleria", "火炮"],
-    "recon": ["recon", "reconnaissance", "reconocimiento", "aufklärer",
-              "разведка", "reconhecimento", "zwiad", "侦察"],
-
-    "armycommander_short": ["cmd", "cdt", "cde", "kdt", "ком", "cmt", "dow", "指挥官"],
-    # "infantry_short": ["inf", "inf", "inf", "inf", "пех", "inf", "pie", "步兵"],
-    # "armor_short": ["arm", "bli", "bli", "pz", "тнк", "bli", "czo", "装甲"],
-    # "artillery_short": ["art", "art", "art", "art", "арт", "art", "art", "火炮"],
-    # "recon_short": ["rec", "rec", "rec", "aufk", "разв", "rec", "zwi", "侦察"],
-
-    # Stats names (keys must match those in SCORE_FUNCTIONS)
-    "combat": ["combat", "combat", "combate", "kampf", "боевой счет", "combate", "walka", "战斗"],
-    "offense": ["offensive", "offensive", "ofensiva", "offensiv", "атака", "ofensiva", "ofensywa", "进攻"],
-    "defense": ["defensive", "défensive", "defensiva", "defensiv", "оборона", "defensiva", "obrona", "防守"],
-    "support": ["support", "soutien", "apoyo", "unterstützung", "поддержка", "suporte", "wsparcie", "支援"],
-    "kills": ["kills", "kills", "bajas", "kills", "убийства", "abates", "zabójstwa", "击杀"],
-    "deaths": ["deaths", "morts", "muertes", "tode", "смерти", "mortes", "zgony", "死亡"],
-
-    # "combat_short": ["cmb", "cmb", "cmb", "kpf", "бой", "cmb", "wal", "战斗"],
-    # "offense_short": ["off", "off", "off", "ang", "атк", "off", "ofe", "进攻"],
-    # "defense_short": ["def", "def", "def", "ver", "обр", "def", "def", "防守"],
-    # "support_short": ["sup", "sou", "apo", "unt", "под", "sup", "wsp", "支援"],
-    # "kills_short": ["kills", "kills", "bajas", "kills", "уб.", "abates", "zab.", "击杀"],
-    # "deaths_short": ["deaths", "morts", "muertes", "tode", "см.", "mortes", "zgony", "死亡"],
-
-    # (keys below will be used for any "player_<key>" or "squad_<key>")
-    "team_kills": ["team kills", "team kills", "team kills", "team kills", "убийства своих", "team kills", "team kills", "队友击杀"],
-    "vehicle_kills": ["vehicle kills", "kills véhicules", "bajas de vehículos", "fahrzeug kills", "убийства в технике", "abates de veículos", "zabójstwa w pojeździe", "载具击杀"],
-    "vehicles_destroyed": ["vehicles destroyed", "véhicules détruits", "vehículos destruidos", "fahrzeuge zerstört", "техника уничтожена", "veículos destruídos", "pojazdy zniszczone", "载具销毁"],
-    "teamplay": ["combat + support", "combat + soutien", "combate + apoyo", "kampf + unterstützung", "бой + поддержка", "combate + apoio", "walka + wsparcie", "团队配合"],
-    "offdef": ["offensive + defensive", "attaque + défense", "ofensiva + defensiva", "offensiv + defensiv", "атака + оборона", "ofensiva + defensiva", "ataki + obrona", "攻防比"],
-    "kd": ["kills / deaths", "kills / morts", "kills / deaths", "kills / tode", "убийства / смерти", "kills / mortes", "zabójstwa / zgony", "KD比"],
-    "kpm": ["kills / minute", "kills / minute", "bajas / minuto", "kills / minute", "убийств / минуту", "abates / minuto", "zabójstwa / minutę", "击杀 / 分"],
-
-    # "team_kills_short": ["TK", "TK", "TK", "TK", "ТК", "TK", "TK", "队友击杀"],
-    # "vehicle_kills_short": ["v.kills", "kills/véhic", "bajas/veh", "fzg.kills", "уб. тех.", "abates/veí", "zab. poj.", "载具击杀"],
-    # "vehicles_destroyed_short": ["v.destr", "véhic.détru", "veh.destr.", "fzg.zen", "техн. унич", "veí.destru", "poj.znisz", "载具销毁"],
-    # "teamplay_short": ["cmb+sup", "cmb+sup", "cmb+sup", "kpf+unt", "бой+под", "cmb+sup", "wal+wsp", "团队配合"],
-    # "offdef_short": ["off+def", "off+def", "off+def", "off+def", "атк+обр", "off+def", "off+def", "攻防比"],
-    # "kd_short": ["kills/deaths", "kills/morts", "kills/deaths", "kills/tode", "уб./см.", "kills/mortes", "zab./zgony", "KD比"],
-    # "kpm_short": ["kills/min", "kills/min", "bajas/min", "kills/min", "уб./мин", "abates/min", "zab./min", "击杀/分"],
-}
-
-# Discord : embed author icon
-DISCORD_EMBED_AUTHOR_ICON_URL = "https://cdn.discordapp.com/icons/316459644476456962/73a28de670af9e6569f231c9385398f3.webp?size=64"
-
-# Bot name that will be displayed in CRCON "audit logs" and Discord embeds
-BOT_NAME = "custom_tools_live_topstats"
-
-
-# (End of configuration)
-# -----------------------------------------------------------------------------
-
 from datetime import datetime, timedelta, timezone
+from typing import Any
 from zoneinfo import ZoneInfo
 import logging
+import os
 import discord
 from rcon.rcon import Rcon, StructuredLogLineWithMetaData
 from rcon.user_config.rcon_server_settings import RconServerSettingsUserConfig
 from rcon.utils import get_server_number
 
+import custom_tools.live_topstats_config as live_topstats_config
+from custom_tools.common_translations import TRANSL
+
 
 # Setup logger
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-if not logger.hasHandlers():
-    logging.basicConfig(level=logging.DEBUG)
+os.makedirs('/logs', exist_ok=True)
+logger = logging.getLogger('live_topstats_standalone')
+logger.setLevel(logging.INFO)
+logger.propagate = False
+if not logger.handlers:
+    formatter = logging.Formatter('[%(asctime)s][%(levelname)s] %(message)s')
+    file_handler = logging.FileHandler('/logs/custom_tools_live_topstats.log', mode='a', encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
 
 
-# Clan related (as set in /settings/rcon-server)
+# Clan related (as set in CRCON user interface, in http://<ip>:8010/settings/others/crcon)
 try:
-    config = RconServerSettingsUserConfig.load_from_db()
-    DISCORD_EMBED_AUTHOR_URL = str(config.server_url)
+    rcon_server_settings_userconfig = RconServerSettingsUserConfig.load_from_db()
+    DISCORD_EMBED_AUTHOR_URL = str(rcon_server_settings_userconfig.server_url)
 except Exception as error:
     logger.error("Could not retrieve DISCORD_EMBED_AUTHOR_URL from database : %s", error)
-    DISCORD_EMBED_AUTHOR_URL = ""
+    DISCORD_EMBED_AUTHOR_URL = "https://github.com/ElGuillermo/HLL_CRCON_Live_topstats"
+
+
+def sanitize_to_int(value: Any, default: int = 0, min_val: int = 0, max_val: int|None = None) -> int:
+    """
+    Converts 'value' to a positive integer (truncating decimals).
+    Returns 'default' :
+    - if conversion isn't possible.
+    - if 'value' is out of min-max range
+    Returns 'value' (int) if converted
+    """
+    try:
+        clean_val = int(float(value))
+        if clean_val < min_val:
+            logger.warning(f"Invalid value in config ('%s' is too low, min allowed is '%s'), using default value : %s", value, min_val, default)
+            return default
+        if max_val is not None and clean_val > max_val:
+            logger.warning(f"Invalid value in config ('%s' is too high, max allowed is '%s'), using default value : %s", value, max_val, default)
+            return default
+        return clean_val
+    except (ValueError, TypeError):
+        logger.warning(f"Invalid value in config ('%s' is not a valid number), using default value : %s", value, default)
+        return default
+
+
+# Check config
+num_langs = len(next(iter(TRANSL.values())))
+live_topstats_config.LANG = sanitize_to_int(live_topstats_config.LANG, default=0, max_val=num_langs - 1)
+live_topstats_config.VIP_COMMANDER_MIN_PLAYTIME_MINS = sanitize_to_int(live_topstats_config.VIP_COMMANDER_MIN_PLAYTIME_MINS, default=20, min_val=0)
+live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE = sanitize_to_int(live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE, default=1000, min_val=0)
+live_topstats_config.VIP_WINNERS = sanitize_to_int(live_topstats_config.VIP_WINNERS, default=0, min_val=0, max_val=100)
+live_topstats_config.SEED_LIMIT = sanitize_to_int(live_topstats_config.SEED_LIMIT, default=40, min_val=0, max_val=100)
+live_topstats_config.GRANTED_VIP_HOURS = sanitize_to_int(live_topstats_config.GRANTED_VIP_HOURS, default=24, min_val=0)
 
 
 def clean_bonus(value, name="BONUS") -> float:
@@ -362,14 +146,14 @@ def give_xh_vip(rcon: Rcon, player_id: str, player_name: str, hours_awarded: int
     rcon.add_vip(player_id, combined_name, expiration_dt.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
     # Local timezone
-    local_tz = ZoneInfo(LOCAL_TIMEZONE)
+    local_tz = ZoneInfo(live_topstats_config.LOCAL_TIMEZONE)
     local_dt = expiration_dt.astimezone(local_tz)
 
     # Message building
-    header = TRANSL['vip_header'][LANG]       # "You are in the topstats!"
-    won_text = TRANSL['vip_won'][LANG]        # "You won a VIP until"
+    header = TRANSL['vip_header'][live_topstats_config.LANG]       # "You are in the topstats!"
+    won_text = TRANSL['vip_won'][live_topstats_config.LANG]        # "You won a VIP until"
     date_str = local_dt.strftime('%d/%m/%Y')  # "01/01/2001"
-    at_text = TRANSL['vip_at'][LANG]          # "at"
+    at_text = TRANSL['vip_at'][live_topstats_config.LANG]          # "at"
     time_str = local_dt.strftime('%Hh%M')     # "12h00"
 
     return f"{header}\n\n{won_text}\n{date_str}, {at_text} {time_str} !"
@@ -382,7 +166,7 @@ def get_player_teamplay(player: dict) -> int:
     """
     combat = int(player.get("combat", 0))
     support = int(player.get("support", 0))
-    support_bonus = clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")
+    support_bonus = clean_bonus(live_topstats_config.SUPPORT_BONUS, "SUPPORT_BONUS")
 
     return int(round(combat + (support * support_bonus)))
 
@@ -394,7 +178,7 @@ def get_player_offdef(player: dict) -> int:
     """
     offense = int(player.get("offense", 0))
     defense = int(player.get("defense", 0))
-    defense_bonus = clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")
+    defense_bonus = clean_bonus(live_topstats_config.DEFENSE_BONUS, "DEFENSE_BONUS")
 
     return int(round(offense + (defense * defense_bonus)))
 
@@ -451,7 +235,7 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
                 if score and score > 0:
                     name = cmd["name"][:30]  # [:30] avoids line returns
                     if mention_details:
-                        name = f"({TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander_short'][LANG].capitalize()}) {name[:20]}"  # [:20] avoids line returns
+                        name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{TRANSL['armycommander_short'][live_topstats_config.LANG].capitalize()}) {name[:20]}"  # [:20] avoids line returns
                     players_stats.append({
                         "name": name,
                         "score": score,
@@ -469,7 +253,7 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
                         if score and score > 0:
                             name = p["name"][:30]
                             if mention_details:
-                                name = f"({TRANSL[side][LANG].capitalize()}/{s_name[0].upper()}) {name[:20]}"
+                                name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{s_name[0].upper()}) {name[:20]}"
                             players_stats.append({
                                 "name": name,
                                 "score": score,
@@ -480,10 +264,12 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
     players_stats.sort(key=lambda x: x["score"], reverse=True)
 
     # VIP
-    if give_vip and server_status["current_players"] >= SEED_LIMIT:
-
-        winners = players_stats[:VIP_WINNERS]
-        granted_vip_hours = GRANTED_VIP_HOURS if GRANTED_VIP_HOURS > 0 else 24
+    if (give_vip
+        and server_status["current_players"] >= live_topstats_config.SEED_LIMIT
+        and live_topstats_config.VIP_WINNERS > 0
+        and live_topstats_config.GRANTED_VIP_HOURS > 0
+    ):
+        winners = players_stats[:live_topstats_config.VIP_WINNERS]
 
         for player in winners:
             raw = player['raw_data']
@@ -492,19 +278,19 @@ def get_player_ranking(rcon: Rcon, server_status, api_data: dict, unit_type: str
             if (
                 raw.get('role') == "armycommander"
                 and (
-                    (int(raw.get('offense', 0)) + int(raw.get('defense', 0))) / 20 < VIP_COMMANDER_MIN_PLAYTIME_MINS
-                    or int(raw.get('support', 0)) < VIP_COMMANDER_MIN_SUPPORT_SCORE
+                    (int(raw.get('offense', 0)) + int(raw.get('defense', 0))) / 20 < live_topstats_config.VIP_COMMANDER_MIN_PLAYTIME_MINS
+                    or int(raw.get('support', 0)) < live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE
                 )
             ):
                 continue  # Player won't receive any message
 
             # Only give VIP if the player has either :
             # - no VIP at all
-            # - a VIP that ends in less than granted_vip_hours
-            if is_vip_for_less_than_xh(rcon, player['player_id'], granted_vip_hours):
-                vip_message = give_xh_vip(rcon, player['player_id'], player['name'], granted_vip_hours)
+            # - a VIP that ends in less than GRANTED_VIP_HOURS
+            if is_vip_for_less_than_xh(rcon, player['player_id'], live_topstats_config.GRANTED_VIP_HOURS):
+                vip_message = give_xh_vip(rcon, player['player_id'], player['name'], live_topstats_config.GRANTED_VIP_HOURS)
             else:
-                vip_message = f"{TRANSL['vip_header'][LANG]}\n\n{TRANSL['already_vip'][LANG]}\n"
+                vip_message = f"{TRANSL['vip_header'][live_topstats_config.LANG]}\n\n{TRANSL['already_vip'][live_topstats_config.LANG]}\n"
 
             try:
                 rcon.message_player(
@@ -532,7 +318,7 @@ def get_squad_teamplay(squad: dict) -> int:
     """
     combat = int(squad.get("combat", 0))
     support = int(squad.get("support", 0))
-    support_bonus = clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")
+    support_bonus = clean_bonus(live_topstats_config.SUPPORT_BONUS, "SUPPORT_BONUS")
 
     return int(round(combat + (support * support_bonus)))
 
@@ -544,7 +330,7 @@ def get_squad_offdef(squad: dict) -> int:
     """
     offense = int(squad.get("offense", 0))
     defense = int(squad.get("defense", 0))
-    defense_bonus = clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")
+    defense_bonus = clean_bonus(live_topstats_config.DEFENSE_BONUS, "DEFENSE_BONUS")
 
     return int(round(offense + (defense * defense_bonus)))
 
@@ -658,7 +444,7 @@ def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3
                     "support": cmd.get("support", 0)
                 }
                 score = score_func(fake_squad)
-                squads_stats.append({"name": f"{TRANSL[side][LANG].capitalize()}/{TRANSL['armycommander_short'][LANG].capitalize()}", "score": score})
+                squads_stats.append({"name": f"{TRANSL[side][live_topstats_config.LANG].capitalize()}/{TRANSL['armycommander_short'][live_topstats_config.LANG].capitalize()}", "score": score})
 
         # Squads
         else:
@@ -667,7 +453,7 @@ def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3
                 if s_name != "unassigned" and str(s_info.get("type")).lower() == unit_type.lower():
                     score = score_func(s_info)
                     if score and score > 0:
-                        name = f"{TRANSL[side][LANG].capitalize()}/{s_name[0].upper()}"
+                        name = f"{TRANSL[side][live_topstats_config.LANG].capitalize()}/{s_name[0].upper()}"
                         squads_stats.append({
                             "name": name,
                             "score": score
@@ -695,11 +481,10 @@ SCORE_FUNCTIONS = {
     "kills": lambda p: int(p.get("kills", 0)),
     "deaths": lambda p: int(p.get("deaths", 0)),
     # Directly calculated (no dedicated function)
-    "defense_bonus": lambda p: int(int(p.get("defense", 0)) * clean_bonus(DEFENSE_BONUS, "DEFENSE_BONUS")),
-    "support_bonus": lambda p: int(int(p.get("support", 0)) * clean_bonus(SUPPORT_BONUS, "SUPPORT_BONUS")),
+    "defense_bonus": lambda p: int(int(p.get("defense", 0)) * clean_bonus(live_topstats_config.DEFENSE_BONUS, "DEFENSE_BONUS")),
+    "support_bonus": lambda p: int(int(p.get("support", 0)) * clean_bonus(live_topstats_config.SUPPORT_BONUS, "SUPPORT_BONUS")),
 
     # (players)
-    # No need to create a dedicated function, as the stat is directly available from the 'get_team_view' endpoint
     "player_team_kills": lambda p: int(p.get("team_kills", 0)),
     "player_vehicle_kills": lambda p: int(p.get("vehicle_kills", 0)),
     "player_vehicles_destroyed": lambda p: int(p.get("vehicles_destroyed", 0)),
@@ -710,7 +495,6 @@ SCORE_FUNCTIONS = {
     "player_kpm": get_player_kpm,                              # kills / minute
 
     # (squads)
-    # These are calculated stats, provided by dedicated functions
     "squad_team_kills": get_squad_team_kills,                  # cumulated team_kills
     "squad_vehicle_kills": get_squad_vehicle_kills,            # cumulated vehicle_kills
     "squad_vehicles_destroyed": get_squad_vehicles_destroyed,  # cumulated vehicles_destroyed
@@ -743,18 +527,18 @@ def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
 
             if valid_results:
                 if not category_header_added:
-                    title = TRANSL[main_header_key][LANG].upper()
+                    title = TRANSL[main_header_key][live_topstats_config.LANG].upper()
                     category_lines.append(f"— {title} —")
                     category_header_added = True
 
-                unit_name = TRANSL.get(unit_type.lower(), [unit_type])[LANG].capitalize()
+                unit_name = TRANSL.get(unit_type.lower(), [unit_type])[live_topstats_config.LANG].capitalize()
                 category_lines.append(f"└ {unit_name}")
 
                 for i, (r, results) in enumerate(valid_results):
                     raw_score_key = r['score'].lower()
                     clean_key = raw_score_key.removeprefix("player_").removeprefix("squad_")
                     translations = TRANSL.get(clean_key)
-                    stat_label = translations[LANG].capitalize() if translations else clean_key.capitalize()
+                    stat_label = translations[live_topstats_config.LANG].capitalize() if translations else clean_key.capitalize()
 
                     is_last_stat = (i == len(valid_results) - 1)
                     # branch = " └" if is_last_stat else " ├"
@@ -790,7 +574,7 @@ def stats_on_chat_command(
     """
     # Check if script is enabled on actual server
     server_number = get_server_number()
-    if server_number not in ENABLE_ON_SERVERS:
+    if server_number not in live_topstats_config.ENABLE_ON_SERVERS:
         return
 
     # Check log for mandatory variable
@@ -798,7 +582,7 @@ def stats_on_chat_command(
     if chat_message is None:
         return
 
-    if chat_message == CHAT_COMMAND:
+    if chat_message == live_topstats_config.CHAT_COMMAND:
 
         # Check log for mandatory variable
         player_id: str|None = struct_log["player_id_1"]
@@ -809,11 +593,11 @@ def stats_on_chat_command(
         get_team_view: dict = rcon.get_team_view()
 
         # Process data
-        report = generate_full_report(rcon, get_team_view, CONFIG, is_match_end=False)
+        report = generate_full_report(rcon, get_team_view, live_topstats_config.STATS_TO_DISPLAY, is_match_end=False)
 
         # Ingame message
         if not report:
-            message = f"{TRANSL['nostatsyet'][LANG]}"
+            message = f"{TRANSL['nostatsyet'][live_topstats_config.LANG]}"
         else:
             message = f"{report}"
 
@@ -838,23 +622,23 @@ def stats_on_match_end(
     """
     # Check if script is enabled on actual server
     server_number = get_server_number()
-    if server_number not in ENABLE_ON_SERVERS:
+    if server_number not in live_topstats_config.ENABLE_ON_SERVERS:
         return
 
     # Get data from RCON
     get_team_view: dict = rcon.get_team_view()
 
     # Process data
-    report = generate_full_report(rcon, get_team_view, CONFIG, is_match_end=True)  # is_match_end=True enables VIP granting
+    report = generate_full_report(rcon, get_team_view, live_topstats_config.STATS_TO_DISPLAY, is_match_end=True)  # is_match_end=True enables VIP granting
 
     # Prepare ingame message and logs
     if not report:
-        message = f"{TRANSL['nostatsyet'][LANG]}"
+        message = f"{TRANSL['nostatsyet'][live_topstats_config.LANG]}"
     else:
         message = f"{report}"
 
     # logs
-    logger.info(f"{'-' * 79}\n{message}")
+    logger.info(f"\n{message}")
 
     # Ingame message (only if available stats)
     if report:
@@ -865,24 +649,24 @@ def stats_on_match_end(
 
     # Discord
     server_number = int(get_server_number())
-    if not DISCORD_CONFIG[server_number - 1][1]:
+    if not live_topstats_config.DISCORD_CONFIG[server_number - 1][1]:
         return
 
-    discord_webhook = DISCORD_CONFIG[server_number - 1][0]
+    discord_webhook = live_topstats_config.DISCORD_CONFIG[server_number - 1][0]
 
     webhook = discord.SyncWebhook.from_url(discord_webhook)
 
     embed = discord.Embed(
-        title=TRANSL['gamejustended'][LANG],
+        title=TRANSL['gamejustended'][live_topstats_config.LANG],
         url="",
         description=message,
         color=0xffffff
     )
 
     embed.set_author(
-        name=BOT_NAME,
+        name=live_topstats_config.BOT_NAME,
         url=DISCORD_EMBED_AUTHOR_URL,
-        icon_url=DISCORD_EMBED_AUTHOR_ICON_URL
+        icon_url=live_topstats_config.DISCORD_EMBED_AUTHOR_ICON_URL
     )
 
     embeds = []
