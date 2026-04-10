@@ -88,7 +88,8 @@ This new version (April 6, 2026) allows you to choose :
     ```
 
 ## Config
-- Edit `/root/hll_rcon_tool/custom_tools/live_topstats.py` and set the parameters to fit your needs.
+- Edit `/root/hll_rcon_tool/custom_tools/live_topstats_config.py` and set the parameters to fit your needs.
+
 - Restart CRCON :
   ```shell
   cd /root/hll_rcon_tool
