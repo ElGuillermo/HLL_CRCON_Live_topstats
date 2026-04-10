@@ -65,6 +65,8 @@ This new version (April 6, 2026) allows you to choose :
 
   wget -O https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats.py
 
+  wget -O https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats_config.py
+
   wget -O https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_custom_common_translations.py/refs/heads/main/common_translations.py
   ```
 
@@ -104,6 +106,7 @@ This new version (April 6, 2026) allows you to choose :
 ⚠️ Any change to these files requires a CRCON rebuild and restart (using the `restart.sh` script) to be taken in account :
 - `/root/hll_rcon_tool/custom_tools/common_translations.py`
 - `/root/hll_rcon_tool/custom_tools/live_topstats.py`
+- `/root/hll_rcon_tool/custom_tools/live_topstats_config.py`
 - `/root/hll_rcon_tool/rcon/hooks.py`
 
 ⚠️ This plugin requires a modification of the `/root/hll_rcon_tool/rcon/hooks.py` file, which originates from the official CRCON depot.  
