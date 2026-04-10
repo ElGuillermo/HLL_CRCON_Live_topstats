@@ -64,6 +64,8 @@ This new version (April 6, 2026) allows you to choose :
   cd /root/hll_rcon_tool/custom_tools
 
   wget -O https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats.py
+
+  wget -O https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_custom_common_translations.py/refs/heads/main/common_translations.py
   ```
 
 - Modify CRCON files  
@@ -88,16 +90,19 @@ This new version (April 6, 2026) allows you to choose :
 - Restart CRCON :
   ```shell
   cd /root/hll_rcon_tool
+
   sh ./restart.sh
   ```
   If you don't want to use the `restart.sh` script, you can rebuild containers and restart CRCON using Docker commands :  
   ```shell
   cd /root/hll_rcon_tool
+
   sudo docker compose build && sudo docker compose down && sudo docker compose up -d --remove-orphans
   ```
 
 ## Limitations
 ⚠️ Any change to these files requires a CRCON rebuild and restart (using the `restart.sh` script) to be taken in account :
+- `/root/hll_rcon_tool/custom_tools/common_translations.py`
 - `/root/hll_rcon_tool/custom_tools/live_topstats.py`
 - `/root/hll_rcon_tool/rcon/hooks.py`
 
