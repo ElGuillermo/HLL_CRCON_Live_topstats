@@ -37,6 +37,7 @@ This new version (April 6, 2026) allows you to choose :
   └ offdef (offense + defense * bonus)
   └ kills/deaths ratio
   └ killrate
+
 - Top squads
 └ infantry
   └ teamplay
