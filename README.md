@@ -101,6 +101,8 @@ This new version (April 6, 2026) allows you to choose :
       live_topstats.stats_on_match_end(rcon, struct_log)
     ```
 
+---
+
 ## Configuration
 
 ### 1/2 - Edit `/root/hll_rcon_tool/custom_tools/live_topstats_config.py`
