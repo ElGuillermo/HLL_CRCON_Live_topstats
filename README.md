@@ -9,15 +9,13 @@ Unofficial plugin for the Hell Let Loose (HLL) [CRCON](https://github.com/Marech
 ---
 
 ## Features
-- Select the stats and number of players you want to display
-- Choose the enabled servers (ex : only on 1, 2, 3 and 7)
-- Stats can be called anytime using a configurable chat command (default: `!top`).
-- Stats will always be displayed to all players at game's end.
-- Award VIPs at endgame : choose the duration and the number of winners.
+- Choose the servers on which the script is activated. (ex : only on 1, 2, 3 and 7)
+- Select the stats and number of players you want to display.
+- A multiplier bonus can be given to defense and support, to reward the players who play for the team rather than for their individual stats.
+- Stats message can be called anytime using a configurable chat command (default: `!top`).
+- Stats message can be displayed to all players at endgame.
+- VIPs can be awarded at endgame : choose the duration and the number of winners.
 - Endgame stats can be sent in a Discord channel.
-- A multiplier bonus can be given to defense and support scores,  
-  to reward first and foremost the players who play for the team  
-  rather than for their individual stats.
 - Available translations : english, french, spanish, german, russian, brazilian portuguese, polish and chinese.
 
 ### Observed scores
