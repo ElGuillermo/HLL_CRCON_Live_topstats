@@ -31,12 +31,12 @@ This new version (April 6, 2026) allows you to choose :
 ```
 ─ Top players ─
 └ commander
-  └ teamplay (combat + support * bonus)
+  └ teamplay     (combat + support * bonus)
 └ infantry
   └ teamplay
-  └ offdef (offense + defense * bonus)
-  └ kills/deaths ratio
-  └ killrate
+  └ offdef       (offense + defense * bonus)
+  └ kills/deaths
+  └ kills/min
 
 ─ Top squads ─
 └ infantry
