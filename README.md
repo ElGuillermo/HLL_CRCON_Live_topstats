@@ -12,10 +12,10 @@ that displays and rewards top players and squads, based on their scores.
 - Stats will always be displayed to all players at game's end.
 - Award VIPs at endgame : choose the duration and the number of winners.
 - Endgame stats can be sent in a Discord channel.
-- Available translations : english, french, spanish, german, russian, brazilian portuguese, polish and chinese.
 - A multiplier bonus can be given to defense and support scores,  
   to reward first and foremost the players who play for the team  
   rather than for their individual stats.
+- Available translations : english, french, spanish, german, russian, brazilian portuguese, polish and chinese.
 
 ## Observed scores
 
