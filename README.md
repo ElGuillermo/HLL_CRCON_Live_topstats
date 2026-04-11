@@ -28,7 +28,7 @@ This new version (April 6, 2026) allows you to choose :
 - any available stat from `get_team_view` CRCON API endpoint can be mapped or combined
 
 ### The script comes with default (usual) settings :  
-
+```
 - players :
   - commander :
     - teamplay (combat + support * bonus)
@@ -48,6 +48,7 @@ This new version (April 6, 2026) allows you to choose :
     - teamplay
   - recon :
     - teamplay
+```
 
 ---
 
