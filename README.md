@@ -20,7 +20,7 @@ Unofficial plugin for the Hell Let Loose (HLL) [CRCON](https://github.com/Marech
 
 ### Observed scores
 
-This new version (April 6, 2026) allows you to choose :  
+This new version (April 6th, 2026) allows you to choose :  
 - players/squads to be observed :  
   - commander, infantry, armor, artillery, recon  
 - any available stat from `get_team_view` CRCON API endpoint can be mapped or combined
