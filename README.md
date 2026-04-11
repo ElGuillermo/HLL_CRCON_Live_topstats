@@ -28,25 +28,25 @@ This new version (April 6, 2026) allows you to choose :
 ### The script comes with default (usual) settings :  
 ```
 ─ TOP PLAYERS ─
-└ commander
-  └ teamplay     (combat + support * bonus)
-└ infantry
-  └ teamplay
-  └ offdef       (offense + defense * bonus)
-  └ kills/deaths
-  └ kills/min
+└ Commander
+  └ Teamplay     (combat + support * bonus)
+└ Infantry
+  └ Teamplay
+  └ Offdef       (offense + defense * bonus)
+  └ Kills/deaths
+  └ Kills/min
 
 ─ TOP SQUADS ─
-└ infantry
-  └ teamplay
-  └ offdef
-└ armor
-  └ teamplay
-  └ vehicles_destroyed
-└ artillery
-  └ teamplay
-└ recon
-  └ teamplay
+└ Infantry
+  └ Teamplay
+  └ Offdef
+└ Armor
+  └ Teamplay
+  └ Vehicles_destroyed
+└ Artillery
+  └ Teamplay
+└ Recon
+  └ Teamplay
 ```
 
 ---
