@@ -51,6 +51,13 @@ This new version (April 6, 2026) allows you to choose :
 
 ---
 
+> [!IMPORTANT]
+> - The shell commands given below assume your CRCON is installed in `/root/hll_rcon_tool`  
+>   You may have installed your CRCON in a different folder.  
+>   If so, you'll have to adapt the commands below accordingly.
+>
+> - Always copy/paste/execute commands :warning: one line at a time :warning:
+
 ## Installation
 
 ### 1/3 - Log into your CRCON host machine using SSH
