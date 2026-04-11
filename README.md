@@ -125,7 +125,7 @@ This new version (April 6, 2026) allows you to choose :
 
 ### Disable this plugin
 
-- Revert the changes made in [Installation 3/3](#33---edit-roothll_rcon_toolconfigsupervisordconf)
+- Revert the changes made in [Installation 3/3](#33---edit-roothll_rcon_toolrconhookspy)
 
 --
 
