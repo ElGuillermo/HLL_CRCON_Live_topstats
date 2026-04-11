@@ -27,7 +27,7 @@ This new version (April 6, 2026) allows you to choose :
 
 ### The script comes with default (usual) settings :  
 ```
-─ Top players ─
+─ TOP PLAYERS ─
 └ commander
   └ teamplay     (combat + support * bonus)
 └ infantry
@@ -36,7 +36,7 @@ This new version (April 6, 2026) allows you to choose :
   └ kills/deaths
   └ kills/min
 
-─ Top squads ─
+─ TOP SQUADS ─
 └ infantry
   └ teamplay
   └ offdef
