@@ -69,17 +69,23 @@ This new version (April 6th, 2026) allows you to choose :
 - Copy/paste/execute these commands :  
   ```shell
   cd /root/hll_rcon_tool
-
+  ```
+  ```shell
   wget -N https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_restart/refs/heads/main/restart.sh
-
+  ```
+  ```shell
   mkdir -p custom_tools
-
+  ```
+  ```shell
   cd /root/hll_rcon_tool/custom_tools
-
+  ```
+  ```shell
   wget -N https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_custom_common_translations.py/refs/heads/main/common_translations.py
-
+  ```
+  ```shell
   wget -N https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats.py
-
+  ```
+  ```shell
   wget -N https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Live_topstats/refs/heads/main/hll_rcon_tool/custom_tools/live_topstats_config.py
   ```
 
@@ -114,7 +120,8 @@ This new version (April 6th, 2026) allows you to choose :
 - Copy/paste/execute these commands :  
   ```shell
   cd /root/hll_rcon_tool
-  
+  ```
+  ```shell
   sh ./restart.sh
   ```
 
@@ -124,7 +131,8 @@ This new version (April 6th, 2026) allows you to choose :
 >  - Copy/paste/execute these commands :  
 >  ```shell
 >  cd /root/hll_rcon_tool
->
+>  ```
+>  ```shell
 >  sudo docker compose build && sudo docker compose down && sudo docker compose up -d --remove-orphans
 >  ```
 
@@ -158,9 +166,11 @@ This plugin requires a modification of original CRCON file(s).
 - Copy/paste/execute these commands : 
   ```shell
   cd /root/hll_rcon_tool
-  
+  ```
+  ```shell
   cp rcon/hooks.py rcon/hooks.py.backup
-  
+  ```
+  ```shell
   git restore rcon/hooks.py
   ```
 
@@ -176,10 +186,11 @@ This plugin requires a modification of original CRCON file(s).
   into  
   `/root/hll_rcon_tool/rcon/hooks.py`
 - Rebuild and restart CRCON Docker containers (same procedure as in [Configuration 2/2](#22---rebuild-and-restart-crcon-docker-containers)).
-- If anything works as intended, you can delete the backup file :
+- If everything works as intended, you can delete the backup file :
   - Copy/paste/execute these commands :  
-    ```
+    ```shell
     cd /root/hll_rcon_tool
-  
+    ```
+    ```shell
     rm rcon/hooks.py.backup
     ```
