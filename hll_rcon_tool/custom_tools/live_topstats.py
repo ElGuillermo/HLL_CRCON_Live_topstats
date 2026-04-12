@@ -646,7 +646,7 @@ def stats_on_chat_command(
     """
     # Check if script is enabled on actual server
     server_number = get_server_number()
-    if server_number not in live_topstats_config.ENABLE_ON_SERVERS:
+    if str(server_number) not in live_topstats_config.ENABLE_ON_SERVERS:
         return
 
     # Check log for mandatory variable
@@ -654,7 +654,7 @@ def stats_on_chat_command(
     if chat_message is None:
         return
 
-    if chat_message == live_topstats_config.CHAT_COMMAND:
+    if chat_message.lower() == live_topstats_config.CHAT_COMMAND.lower():
 
         # Check log for mandatory variable
         player_id: str|None = struct_log["player_id_1"]
