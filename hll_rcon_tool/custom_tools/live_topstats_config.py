@@ -37,7 +37,7 @@ CHAT_COMMAND = "!top"
 # Parameters :
 #   (players & squads) "display"              : number of top players/squads to be listed
 #   (players only)     "details" (True/False) : choose to display the (team/squad first letter) before the name of the player. ex : "(Axis/C) Playername"
-#   (players only)     "vip_winners"          : give a VIP to this number of top players (up to 'limit' number above)
+#   (players only)     "vip_winners"          : give a VIP to this number of top players (up to 'display' number above)
 STATS_TO_DISPLAY = {
     "players": {
         "armycommander": [
