@@ -4,7 +4,7 @@ Unofficial plugin for the Hell Let Loose (HLL) [CRCON](https://github.com/Marech
 
 ### Displays and rewards top players and squads, based on their stats.
 
-![HLL_CRCON_Live_topstats](https://github.com/user-attachments/assets/bc740f69-b296-46f4-b9fa-21b68abb57af)
+![HLL_CRCON_Live_topstats](https://github.com/user-attachments/assets/c1dd3cef-b29b-4e76-bcdf-b65318e8ad36)
 
 ---
 
