@@ -41,7 +41,7 @@ CHAT_COMMAND = "!top"
 STATS_TO_DISPLAY = {
     "players": {
         "armycommander": [
-            {"score": "player_teamplay", "display": 2, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
+            {"score": "player_teamplay", "display": 2, "details": True, "vip_winners": 1},             # combat + support * SUPPORT_BONUS
         ],
         "infantry": [
             # {"score": "combat", "display": 3, "details": True, "vip_winners": 0},
