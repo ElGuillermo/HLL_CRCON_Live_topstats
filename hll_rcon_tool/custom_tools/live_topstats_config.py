@@ -24,7 +24,10 @@ LANG = 0
 #      ["2", "4", "5"] = enabled on servers 2, 4 and 5
 ENABLE_ON_SERVERS = ["1"]
 
-# Calling from chat
+# Display on matchend ?
+DISPLAY_ON_MATCHEND = True
+
+# Chat command
 CHAT_COMMAND = "!top"
 
 # Stats to display
@@ -32,30 +35,30 @@ CHAT_COMMAND = "!top"
 # Define the stats to observe for each players and squads types
 #   (see all available stats in example config below)
 # Parameters :
-#   (players & squads) "limit"                : number of top players/squads to be listed
+#   (players & squads) "display"              : number of top players/squads to be listed
 #   (players only)     "details" (True/False) : choose to display the (team/squad first letter) before the name of the player. ex : "(Axis/C) Playername"
-#   (players only)     "vip"     (True/False) : choose to give a VIP to the first VIP_WINNERS players (configure this number below)
+#   (players only)     "vip_winners"          : give a VIP to this number of top players (up to 'limit' number above)
 STATS_TO_DISPLAY = {
     "players": {
         "armycommander": [
-            {"score": "player_teamplay", "limit": 2, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
+            {"score": "player_teamplay", "display": 2, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
         ],
         "infantry": [
-            # {"score": "combat", "limit": 3, "details": True, "vip": False},
-            # {"score": "offense", "limit": 3, "details": True, "vip": False},
-            # {"score": "defense", "limit": 3, "details": True, "vip": False},
-            # {"score": "defense_bonus", "limit": 3, "details": True, "vip": False},  # defense * DEFENSE_BONUS
-            # {"score": "support", "limit": 3, "details": True, "vip": False},
-            # {"score": "support_bonus", "limit": 3, "details": True, "vip": False},  # support * SUPPORT_BONUS
-            # {"score": "kills", "limit": 3, "details": True, "vip": False},
-            # {"score": "deaths", "limit": 3, "details": True, "vip": False},
-            # {"score": "player_team_kills", "limit": 3, "details": True, "vip": False},
-            # {"score": "player_vehicle_kills", "limit": 3, "details": True, "vip": False},
-            # {"score": "player_vehicles_destroyed", "limit": 3, "details": True, "vip": False},
-            {"score": "player_teamplay", "limit": 3, "details": True, "vip": True},  # combat + support * SUPPORT_BONUS
-            {"score": "player_offdef", "limit": 3, "details": True, "vip": True},  # offense + defense * DEFENSE_BONUS
-            {"score": "player_kd", "limit": 3, "details": True, "vip": False},  # kills / deaths
-            {"score": "player_kpm", "limit": 3, "details": True, "vip": False}  # kills per minute
+            # {"score": "combat", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "offense", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "defense", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "defense_bonus", "display": 3, "details": True, "vip_winners": 0},             # defense * DEFENSE_BONUS
+            # {"score": "support", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "support_bonus", "display": 3, "details": True, "vip_winners": 0},             # support * SUPPORT_BONUS
+            # {"score": "kills", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "deaths", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "player_team_kills", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "player_vehicle_kills", "display": 3, "details": True, "vip_winners": 0},
+            # {"score": "player_vehicles_destroyed", "display": 3, "details": True, "vip_winners": 0},
+            {"score": "player_teamplay", "display": 3, "details": True, "vip_winners": 3},             # combat + support * SUPPORT_BONUS
+            {"score": "player_offdef", "display": 3, "details": True, "vip_winners": 3},               # offense + defense * DEFENSE_BONUS
+            {"score": "player_kd", "display": 3, "details": True, "vip_winners": 0},                   # kills / deaths
+            {"score": "player_kpm", "display": 3, "details": True, "vip_winners": 0}                   # kills per minute
         ],
         "armor": [
             # add any stat using the templates above
@@ -72,31 +75,31 @@ STATS_TO_DISPLAY = {
             # Prefer using the "armycommander" part in "players"
         ],
         "infantry": [
-            # {"score": "combat", "limit": 2},
-            # {"score": "offense", "limit": 2},
-            # {"score": "defense", "limit": 2},
-            # {"score": "defense_bonus", "limit": 2},
-            # {"score": "support", "limit": 2},
-            # {"score": "support_bonus", "limit": 2},
-            # {"score": "kills", "limit": 2},
-            # {"score": "deaths", "limit": 2},
-            # {"score": "squad_team_kills", "limit": 2},
-            # {"score": "squad_vehicle_kills", "limit": 2},
-            # {"score": "squad_vehicles_destroyed", "limit": 2},
-            {"score": "squad_teamplay", "limit": 2},
-            {"score": "squad_offdef", "limit": 2},
-            # {"score": "squad_kd", "limit": 2},
-            # {"score": "squad_kpm", "limit": 2},
+            # {"score": "combat", "display": 2},
+            # {"score": "offense", "display": 2},
+            # {"score": "defense", "display": 2},
+            # {"score": "defense_bonus", "display": 2},
+            # {"score": "support", "display": 2},
+            # {"score": "support_bonus", "display": 2},
+            # {"score": "kills", "display": 2},
+            # {"score": "deaths", "display": 2},
+            # {"score": "squad_team_kills", "display": 2},
+            # {"score": "squad_vehicle_kills", "display": 2},
+            # {"score": "squad_vehicles_destroyed", "display": 2},
+            {"score": "squad_teamplay", "display": 2},
+            {"score": "squad_offdef", "display": 2},
+            # {"score": "squad_kd", "display": 2},
+            # {"score": "squad_kpm", "display": 2},
         ],
         "armor": [
-            {"score": "squad_teamplay", "limit": 2},
-            {"score": "squad_vehicles_destroyed", "limit": 2},
+            {"score": "squad_teamplay", "display": 2},
+            {"score": "squad_vehicles_destroyed", "display": 2},
         ],
         "artillery": [
-            {"score": "squad_teamplay", "limit": 2}
+            {"score": "squad_teamplay", "display": 2}
         ],
         "recon": [
-            {"score": "squad_teamplay", "limit": 2}
+            {"score": "squad_teamplay", "display": 2}
         ]
     }
 }
@@ -116,12 +119,6 @@ SUPPORT_BONUS = 1.5
 
 # VIP (only given to players at the end of a game)
 # ----------------------------------------
-
-# Give VIP the best nth top players in each VIP-enabled players subcategory ("armycommander", "infantry", "armor", "artillery", "recon") :
-# ie : 1 = gives a VIP to the top #1 player
-#      2 = gives a VIP to the top #1 and #2 players
-#      0 = disabled (no VIP given)
-VIP_WINNERS = 1
 
 # Don't give a VIP to an "entered at last second" commander
 VIP_COMMANDER_MIN_PLAYTIME_MINS = 20
@@ -173,7 +170,3 @@ DISCORD_EMBED_AUTHOR_ICON_URL = "https://cdn.discordapp.com/icons/31645964447645
 
 # Bot name that will be displayed in CRCON "audit logs" and Discord embeds
 BOT_NAME = "custom_tools_live_topstats"
-
-
-# (End of configuration)
-# -----------------------------------------------------------------------------
