@@ -73,7 +73,6 @@ num_langs = len(next(iter(TRANSL.values())))
 live_topstats_config.LANG = sanitize_to_int(live_topstats_config.LANG, default=0, max_val=num_langs - 1)
 live_topstats_config.VIP_COMMANDER_MIN_PLAYTIME_MINS = sanitize_to_int(live_topstats_config.VIP_COMMANDER_MIN_PLAYTIME_MINS, default=20, min_val=0)
 live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE = sanitize_to_int(live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE, default=1000, min_val=0)
-live_topstats_config.VIP_WINNERS = sanitize_to_int(live_topstats_config.VIP_WINNERS, default=0, min_val=0, max_val=100)
 live_topstats_config.SEED_LIMIT = sanitize_to_int(live_topstats_config.SEED_LIMIT, default=40, min_val=0, max_val=100)
 live_topstats_config.GRANTED_VIP_HOURS = sanitize_to_int(live_topstats_config.GRANTED_VIP_HOURS, default=24, min_val=0)
 
@@ -221,31 +220,43 @@ def get_player_kpm(player: dict) -> float:
 def get_player_ranking(
         rcon: Rcon,
         server_status,
-        api_data: dict,
-        unit_type: str,
+        get_team_view_output: dict,
+        observed_unit_type: str,
         score_func,
-        limit: int = 3,
-        mention_details: bool = False,
-        give_vip: bool = False
+        display: int = 3,
+        details: bool = False,
+        vip_winners: int = 0
     ) -> list:
     """
     Extracts, ranks, and optionally triggers VIP rewards.
     """
+    # Get data (initial "result" branch can be missing)
+    result = get_team_view_output.get("result", get_team_view_output)
+
     players_stats = []
-    result = api_data.get("result", api_data)
 
     for side in ["allies", "axis"]:
         team_data = result.get(side, {})
 
         # armycommander in "commander" branch
-        if unit_type == "armycommander":
+        if observed_unit_type == "armycommander":
             cmd = team_data.get("commander")
             if cmd:
+
+                # Calculate score
                 score = score_func(cmd)
+
+                # Retain only players having score > 0
                 if score and score > 0:
-                    name = cmd["name"][:30]  # [:30] avoids line returns
-                    if mention_details:
+
+                    # [:30] avoids line returns
+                    name = cmd["name"][:30]
+
+                    # Add team/squad details
+                    if details:
                         name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{TRANSL['armycommander_short'][live_topstats_config.LANG].capitalize()}) {name[:20]}"  # [:20] avoids line returns
+
+                    # Add the formatted entry to the global list
                     players_stats.append({
                         "name": name,
                         "score": score,
@@ -257,13 +268,25 @@ def get_player_ranking(
         else:
             squads = team_data.get("squads", {})
             for s_name, s_info in squads.items():
-                if s_name != "unassigned" and str(s_info.get("type")).lower() == unit_type.lower():
+
+                # Ignore "unassigned" squad, only observe observed_unit_type squads
+                if s_name != "unassigned" and str(s_info.get("type")).lower() == observed_unit_type.lower():
+
+                    # List players in squad
                     for p in s_info.get("players", []):
+
+                        # Calculate score
                         score = score_func(p)
+
+                        # Retain only players having score > 0
                         if score and score > 0:
+
+                            # [:30] avoids line returns
                             name = p["name"][:30]
-                            if mention_details:
+                            if details:
                                 name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{s_name[0].upper()}) {name[:20]}"
+
+                            # Add the formatted entry to the global list
                             players_stats.append({
                                 "name": name,
                                 "score": score,
@@ -271,17 +294,24 @@ def get_player_ranking(
                                 "raw_data": p
                             })
 
+    # Sort global list on "score" (descending)
     players_stats.sort(key=lambda x: x["score"], reverse=True)
 
+    # Final output list
+    formatted_list = []
+    for p in players_stats[:display]:
+        score_val = f"{p['score']:.1f}" if isinstance(p['score'], float) else str(p['score'])
+        formatted_list.append(f"{p['name']} : {score_val}")
+
     # VIP
-    if (give_vip > 0
+    # (vip_winners value can't be higher than 'display' value)
+    vip_winners = sanitize_to_int(vip_winners, default=0, min_val=0, max_val=display)
+
+    if (vip_winners > 0
         and server_status["current_players"] >= live_topstats_config.SEED_LIMIT
-        and live_topstats_config.VIP_WINNERS > 0
         and live_topstats_config.GRANTED_VIP_HOURS > 0
     ):
-        winners = players_stats[:live_topstats_config.VIP_WINNERS]
-
-        for player in winners:
+        for player in players_stats[:vip_winners]:
             raw = player['raw_data']
 
             # No VIP for "entered at last second" commander
@@ -296,7 +326,7 @@ def get_player_ranking(
             # - no VIP at all
             # - a VIP that ends in less than GRANTED_VIP_HOURS
             if is_vip_for_less_than_xh(rcon, player['player_id'], live_topstats_config.GRANTED_VIP_HOURS):
-                vip_message = give_xh_vip(rcon, player['player_id'], player['name'], live_topstats_config.GRANTED_VIP_HOURS)
+                vip_message = give_xh_vip(rcon, player['player_id'], raw.get('name', player['name']), live_topstats_config.GRANTED_VIP_HOURS)
             else:
                 vip_message = f"{TRANSL['vip_header'][live_topstats_config.LANG]}\n\n{TRANSL['already_vip'][live_topstats_config.LANG]}\n"
 
@@ -309,12 +339,6 @@ def get_player_ranking(
                 )
             except Exception as error:
                 logger.error("Ingame VIP message_player couldn't be sent : %s", error)
-
-    # Output list
-    formatted_list = []
-    for p in players_stats[:limit]:
-        score_val = f"{p['score']:.1f}" if isinstance(p['score'], float) else str(p['score'])
-        formatted_list.append(f"{p['name']} : {score_val}")
 
     return formatted_list
 
@@ -428,20 +452,23 @@ def get_squad_vehicle_kills(squad: dict) -> int:
     return total_vehicle_kills
 
 
-def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3) -> list:
+def get_squad_ranking(get_team_view_output: dict, observed_unit_type: str, score_func, display: int = 3) -> list:
     """
     Ranks squads or the Commander unit.
     """
+    # Get data (initial "result" branch can be missing)
+    result = get_team_view_output.get("result", get_team_view_output)
+
     squads_stats = []
-    result = api_data.get("result", api_data)
 
     for side in ["allies", "axis"]:
         team_data = result.get(side, {})
 
-        # Commander
-        if unit_type == "armycommander":
+        # armycommander in "commander" branch
+        if observed_unit_type == "armycommander":
             cmd = team_data.get("commander")
             if cmd:
+
                 # Harmonizing data structure : create an "armycommander" squad subtree
                 fake_squad = {
                     "type": "armycommander",
@@ -451,28 +478,47 @@ def get_squad_ranking(api_data: dict, unit_type: str, score_func, limit: int = 3
                     "combat": cmd.get("combat", 0),
                     "support": cmd.get("support", 0)
                 }
-                score = score_func(fake_squad)
-                squads_stats.append({"name": f"{TRANSL[side][live_topstats_config.LANG].capitalize()}/{TRANSL['armycommander_short'][live_topstats_config.LANG].capitalize()}", "score": score})
 
-        # Squads
+                # Calculate score
+                score = score_func(fake_squad)
+
+                # Retain only players having score > 0
+                if score and score > 0:
+
+                    # Add the formatted entry to the global list
+                    squads_stats.append({"name": f"{TRANSL[side][live_topstats_config.LANG].capitalize()}/{TRANSL['armycommander_short'][live_topstats_config.LANG].capitalize()}", "score": score})
+
+        # squads in "squads" branch
         else:
             squads = team_data.get("squads", {})
             for s_name, s_info in squads.items():
-                if s_name != "unassigned" and str(s_info.get("type")).lower() == unit_type.lower():
+
+                # Ignore "unassigned" squad, only observe observed_unit_type squads
+                if s_name != "unassigned" and str(s_info.get("type")).lower() == observed_unit_type.lower():
+
+                    # Calculate score
                     score = score_func(s_info)
+
+                    # Retain only squads having score > 0
                     if score and score > 0:
+
                         name = f"{TRANSL[side][live_topstats_config.LANG].capitalize()}/{s_name[0].upper()}"
+
+                        # Add a formatted line to the global list
                         squads_stats.append({
                             "name": name,
                             "score": score
                         })
 
+    # Sort global list on "score" (descending)
     squads_stats.sort(key=lambda x: x["score"], reverse=True)
 
-    # Output list
+    # Final output list
     formatted_list = []
-    for s in squads_stats[:limit]:
+    for s in squads_stats[:display]:
+        # Limit the float values to 1 decimal (0.x)
         score_val = f"{s['score']:.1f}" if isinstance(s['score'], float) else str(s['score'])
+        # Add the listed lines to the output list
         formatted_list.append(f"{s['name']} : {score_val}")
 
     return formatted_list
@@ -513,30 +559,29 @@ SCORE_FUNCTIONS = {
 }
 
 
-def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
+def generate_full_report(rcon, get_team_view_output, config, is_match_end: bool = False):
     server_status = rcon.get_status()
     report_sections = []
-    # S = "\u00A0"  # non-concatened space character
 
     def process_config_category(category_key, fetch_func, main_header_key):
         cfg = config.get(category_key, {})
         category_lines = []
 
         active_categories = []
-        for unit_type, rankings in cfg.items():
+        for observed_unit_type, rankings in cfg.items():
             valid_results = []
             for r in rankings:
-                should_grant = is_match_end and r.get("vip", False) if category_key == "players" else False
+                vip_winners = r.get("vip_winners", 0) if is_match_end and category_key == "players" else 0
                 if category_key == "players":
-                    data = fetch_func(rcon, server_status, api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"], r.get("details", False), should_grant)
+                    data = fetch_func(rcon, server_status, get_team_view_output, observed_unit_type, SCORE_FUNCTIONS[r["score"]], r.get("display", 3), r.get("details", True), vip_winners)
                 else:
-                    data = fetch_func(api_data, unit_type, SCORE_FUNCTIONS[r["score"]], r["limit"])
+                    data = fetch_func(get_team_view_output, observed_unit_type, SCORE_FUNCTIONS[r["score"]], r.get("details", True))
 
                 if data:
                     valid_results.append((r, data))
 
             if valid_results:
-                active_categories.append((unit_type, valid_results))
+                active_categories.append((observed_unit_type, valid_results))
 
         if not active_categories:
             return []
@@ -545,12 +590,12 @@ def generate_full_report(rcon, api_data, config, is_match_end: bool = False):
         title = TRANSL[main_header_key][live_topstats_config.LANG].upper()
         category_lines.append(f"{title}")
 
-        for idx_cat, (unit_type, valid_results) in enumerate(active_categories):
+        for idx_cat, (observed_unit_type, valid_results) in enumerate(active_categories):
             is_last_cat = (idx_cat == len(active_categories) - 1)
 
             # Units ("Infantry", "Armor", etc.)
             unit_branch = "└" if is_last_cat else "├"
-            unit_name = TRANSL.get(unit_type.lower(), [unit_type])[live_topstats_config.LANG].capitalize()
+            unit_name = TRANSL.get(observed_unit_type.lower(), [observed_unit_type])[live_topstats_config.LANG].capitalize()
             category_lines.append(f"{unit_branch} {unit_name}")
 
             # Stats ("Combat + Support", etc.)
@@ -617,10 +662,10 @@ def stats_on_chat_command(
             return
 
         # Get data from RCON
-        get_team_view: dict = rcon.get_team_view()
+        get_team_view_output: dict = rcon.get_team_view()
 
         # Process data
-        report = generate_full_report(rcon, get_team_view, live_topstats_config.STATS_TO_DISPLAY, is_match_end=False)
+        report = generate_full_report(rcon, get_team_view_output, live_topstats_config.STATS_TO_DISPLAY, is_match_end=False)
 
         # Ingame message
         if not report:
@@ -647,16 +692,17 @@ def stats_on_match_end(
     Sends final top players in an ingame message to all the players
     Gives VIP to the top players as configured
     """
-    # Check if script is enabled on actual server
-    server_number = get_server_number()
-    if server_number not in live_topstats_config.ENABLE_ON_SERVERS:
+    server_number = int(get_server_number())
+
+    # Check if script is enabled in config and on actual server
+    if not live_topstats_config.DISPLAY_ON_MATCHEND or str(server_number) not in live_topstats_config.ENABLE_ON_SERVERS:
         return
 
     # Get data from RCON
-    get_team_view: dict = rcon.get_team_view()
+    get_team_view_output: dict = rcon.get_team_view()
 
     # Process data
-    report = generate_full_report(rcon, get_team_view, live_topstats_config.STATS_TO_DISPLAY, is_match_end=True)  # is_match_end=True enables VIP granting
+    report = generate_full_report(rcon, get_team_view_output, live_topstats_config.STATS_TO_DISPLAY, is_match_end=True)  # is_match_end=True enables VIP granting
 
     # Prepare ingame message and logs
     if not report:
@@ -667,7 +713,8 @@ def stats_on_match_end(
     # logs
     logger.info(f"\n{message}")
 
-    # Ingame message (only if available stats)
+    # Ingame message
+    # only if there is stats to display
     if report:
         try:
             rcon.message_all_players(message=message)
@@ -675,12 +722,11 @@ def stats_on_match_end(
             logger.error("Ingame message_all_players couldn't be sent : %s", error)
 
     # Discord
-    server_number = int(get_server_number())
     if not live_topstats_config.DISCORD_CONFIG[server_number - 1][1]:
         return
 
     discord_webhook = live_topstats_config.DISCORD_CONFIG[server_number - 1][0]
-
+    # TODO : tester la validité de l'url
     webhook = discord.SyncWebhook.from_url(discord_webhook)
 
     embed = discord.Embed(
