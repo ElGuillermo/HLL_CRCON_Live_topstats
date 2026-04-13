@@ -14,6 +14,8 @@ from typing import Any
 from zoneinfo import ZoneInfo
 import logging
 import os
+from urllib.parse import urlparse  # is_valid_url()
+import re  # is_valid_url()
 import discord
 
 from rcon.rcon import Rcon, StructuredLogLineWithMetaData
@@ -35,15 +37,6 @@ if not logger.handlers:
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
-
-
-# Clan related (as set in CRCON user interface, in http://<ip>:8010/settings/others/crcon)
-try:
-    rcon_server_settings_userconfig = RconServerSettingsUserConfig.load_from_db()
-    DISCORD_EMBED_AUTHOR_URL = str(rcon_server_settings_userconfig.server_url)
-except Exception as error:
-    logger.error("Could not retrieve DISCORD_EMBED_AUTHOR_URL from database : %s", error)
-    DISCORD_EMBED_AUTHOR_URL = "https://github.com/ElGuillermo/HLL_CRCON_Live_topstats"
 
 
 def sanitize_to_int(value: Any, default: int = 0, min_val: int = 0, max_val: int|None = None) -> int:
@@ -75,6 +68,45 @@ live_topstats_config.VIP_COMMANDER_MIN_PLAYTIME_MINS = sanitize_to_int(live_tops
 live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE = sanitize_to_int(live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE, default=1000, min_val=0)
 live_topstats_config.SEED_LIMIT = sanitize_to_int(live_topstats_config.SEED_LIMIT, default=40, min_val=0, max_val=100)
 live_topstats_config.GRANTED_VIP_HOURS = sanitize_to_int(live_topstats_config.GRANTED_VIP_HOURS, default=24, min_val=0)
+
+
+def is_valid_url(url: str, url_type: str = "any") -> bool:
+    """
+    Validates an url based on its type.
+    """
+    try:
+        # Is this an url at least ?
+        parsed = urlparse(url)
+        if not all([parsed.scheme, parsed.netloc]):
+            return False
+
+        # Any url (url_type = "any")
+        if url_type == "any":
+            return True
+
+        # Specific urls types
+        if url_type == "discord_webhook":
+            # Pattern : https://discord.com/api/webhooks/{ID}/{TOKEN}
+            # \d+ : several digits
+            # [a-zA-Z0-9_-]+ : several letters, digits, underscores and hyphens
+            webhook_pattern = r"^https://discord\.com/api/webhooks/\d+/[a-zA-Z0-9_-]+$"
+            return bool(re.match(webhook_pattern, url))
+
+        # unrecognized url_type
+        return False
+
+    except Exception:
+        return False
+
+
+# Clan related (as set in CRCON user interface, in http://<ip>:8010/settings/others/crcon)
+try:
+    rcon_server_settings_userconfig = RconServerSettingsUserConfig.load_from_db()
+    url_to_test = str(rcon_server_settings_userconfig.server_url)
+    DISCORD_EMBED_AUTHOR_URL = url_to_test if is_valid_url(url=url_to_test, url_type="any") else "https://github.com/ElGuillermo/HLL_CRCON_Live_topstats"
+except Exception as error:
+    logger.error("Could not retrieve DISCORD_EMBED_AUTHOR_URL from database : %s", error)
+    DISCORD_EMBED_AUTHOR_URL = "https://github.com/ElGuillermo/HLL_CRCON_Live_topstats"
 
 
 def clean_bonus(value, name="BONUS") -> float:
@@ -249,12 +281,12 @@ def get_player_ranking(
                 # Retain only players having score > 0
                 if score and score > 0:
 
-                    # [:30] avoids line returns
-                    name = cmd["name"][:30]
+                    # [:28] avoids line returns
+                    name = cmd["name"][:28]
 
                     # Add team/squad details
                     if details:
-                        name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{TRANSL['armycommander_short'][live_topstats_config.LANG].capitalize()}) {name[:20]}"  # [:20] avoids line returns
+                        name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{TRANSL['armycommander_short'][live_topstats_config.LANG].capitalize()}) {name[:19]}"  # [:18] avoids line returns
 
                     # Add the formatted entry to the global list
                     players_stats.append({
@@ -282,9 +314,9 @@ def get_player_ranking(
                         if score and score > 0:
 
                             # [:30] avoids line returns
-                            name = p["name"][:30]
+                            name = p["name"][:28]
                             if details:
-                                name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{s_name[0].upper()}) {name[:20]}"
+                                name = f"({TRANSL[side+'_short'][live_topstats_config.LANG].capitalize()}/{s_name[0].upper()}) {name[:18]}"  # [:18] avoids line returns
 
                             # Add the formatted entry to the global list
                             players_stats.append({
@@ -297,30 +329,27 @@ def get_player_ranking(
     # Sort global list on "score" (descending)
     players_stats.sort(key=lambda x: x["score"], reverse=True)
 
-    # Final output list
-    formatted_list = []
-    for p in players_stats[:display]:
-        score_val = f"{p['score']:.1f}" if isinstance(p['score'], float) else str(p['score'])
-        formatted_list.append(f"{p['name']} : {score_val}")
+    # Determine who won a VIP -> store the 'player_id' values in a 'winners_ids' list
+    winners_ids = []
+    vip_winners_count = sanitize_to_int(vip_winners, default=0, min_val=0, max_val=display)
 
-    # VIP
-    # (vip_winners value can't be higher than 'display' value)
-    vip_winners = sanitize_to_int(vip_winners, default=0, min_val=0, max_val=display)
-
-    if (vip_winners > 0
+    if (vip_winners_count > 0
         and server_status["current_players"] >= live_topstats_config.SEED_LIMIT
-        and live_topstats_config.GRANTED_VIP_HOURS > 0
-    ):
-        for player in players_stats[:vip_winners]:
+        and live_topstats_config.GRANTED_VIP_HOURS > 0):
+
+        # Enumerate the first <vip_winners> top players from the (now sorted) global list
+        for player in players_stats[:vip_winners_count]:
             raw = player['raw_data']
 
             # No VIP for "entered at last second" commander
             if raw.get('role') == "armycommander":
                 commander_playtime = (int(raw.get('offense', 0)) + int(raw.get('defense', 0))) / 20
-                commander_support_score = int(raw.get('support', 0))
                 if (commander_playtime < live_topstats_config.VIP_COMMANDER_MIN_PLAYTIME_MINS
-                    or commander_support_score < live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE):
-                    continue  # Player won't receive any message
+                    or int(raw.get('support', 0)) < live_topstats_config.VIP_COMMANDER_MIN_SUPPORT_SCORE):
+                    continue
+
+            # Add the player_id to the winners_ids list
+            winners_ids.append(player['player_id'])
 
             # Only give VIP if the player has either :
             # - no VIP at all
@@ -330,15 +359,20 @@ def get_player_ranking(
             else:
                 vip_message = f"{TRANSL['vip_header'][live_topstats_config.LANG]}\n\n{TRANSL['already_vip'][live_topstats_config.LANG]}\n"
 
+            # Send a message to the winners
             try:
-                rcon.message_player(
-                    player_id=player['player_id'],
-                    message=vip_message,
-                    by=live_topstats_config.BOT_NAME,
-                    save_message=False
-                )
+                rcon.message_player(player_id=player['player_id'], message=vip_message, by=live_topstats_config.BOT_NAME, save_message=False)
             except Exception as error:
-                logger.error("Ingame VIP message_player couldn't be sent : %s", error)
+                logger.error("VIP message error: %s", error)
+
+    # Final output list
+    formatted_list = []
+    for p in players_stats[:display]:
+        score_val = f"{p['score']:.1f}" if isinstance(p['score'], float) else str(p['score'])
+
+        # Add the ★ at the end of the line if this player_id is in the 'winners_ids' list
+        star = " ★" if p['player_id'] in winners_ids else ""
+        formatted_list.append(f"{p['name']} : {score_val}{star}")
 
     return formatted_list
 
@@ -571,7 +605,10 @@ def generate_full_report(rcon, get_team_view_output, config, is_match_end: bool 
         for observed_unit_type, rankings in cfg.items():
             valid_results = []
             for r in rankings:
+
+                # set the <vip_winners> number to 0 if match_end == False (called from chat) or if this is a squad-type score
                 vip_winners = r.get("vip_winners", 0) if is_match_end and category_key == "players" else 0
+
                 if category_key == "players":
                     data = fetch_func(rcon, server_status, get_team_view_output, observed_unit_type, SCORE_FUNCTIONS[r["score"]], r.get("display", 3), r.get("details", True), vip_winners)
                 else:
@@ -625,9 +662,23 @@ def generate_full_report(rcon, get_team_view_output, config, is_match_end: bool 
 
         return category_lines
 
-    # Final report
+    # Final report construction
     player_lines = process_config_category("players", get_player_ranking, "top_players")
     squad_lines = process_config_category("squads", get_squad_ranking, "top_squads")
+
+    # VIP legend (on top)
+    # Check if VIP granting is available
+    if is_match_end and player_lines and live_topstats_config.GRANTED_VIP_HOURS > 0:
+        # Check if VIP granting is enabled in observed stats
+        player_cfg = config.get("players", {})
+        has_vip_enabled = any(
+            any(r.get("vip_winners", 0) > 0 for r in rankings)
+            for rankings in player_cfg.values()
+        )
+
+        if has_vip_enabled:
+            vip_note = TRANSL['vip_footer_note'][live_topstats_config.LANG]
+            report_sections.append(f"★ = {vip_note}")
 
     if player_lines:
         report_sections.append("\n".join(player_lines))
@@ -654,6 +705,7 @@ def stats_on_chat_command(
     if chat_message is None:
         return
 
+    # This message is the expected command word (insensitive case)
     if chat_message.lower() == live_topstats_config.CHAT_COMMAND.lower():
 
         # Check log for mandatory variable
@@ -665,7 +717,7 @@ def stats_on_chat_command(
         get_team_view_output: dict = rcon.get_team_view()
 
         # Process data
-        report = generate_full_report(rcon, get_team_view_output, live_topstats_config.STATS_TO_DISPLAY, is_match_end=False)
+        report = generate_full_report(rcon, get_team_view_output, live_topstats_config.STATS_TO_DISPLAY, is_match_end=False)  # is_match_end=False disables VIP granting
 
         # Ingame message
         if not report:
@@ -689,8 +741,10 @@ def stats_on_match_end(
     struct_log: StructuredLogLineWithMetaData
 ):
     """
-    Sends final top players in an ingame message to all the players
-    Gives VIP to the top players as configured
+    - Sends ingame message to all the players
+    - Gives VIP to the top players as configured
+    - Logs the message
+    - Sends the message to a Discord embed
     """
     server_number = int(get_server_number())
 
@@ -722,11 +776,18 @@ def stats_on_match_end(
             logger.error("Ingame message_all_players couldn't be sent : %s", error)
 
     # Discord
+    # Sending to Discord is disabled for this server
     if not live_topstats_config.DISCORD_CONFIG[server_number - 1][1]:
         return
 
+    # Get the webhook url from config
     discord_webhook = live_topstats_config.DISCORD_CONFIG[server_number - 1][0]
-    # TODO : tester la validité de l'url
+
+    # This webhook url is not valid
+    if not is_valid_url(url=discord_webhook, url_type="discord_webhook"):
+        logger.warning("invalid webhook url for server '%s'. Please check your config.", str(server_number))
+        return
+
     webhook = discord.SyncWebhook.from_url(discord_webhook)
 
     embed = discord.Embed(
