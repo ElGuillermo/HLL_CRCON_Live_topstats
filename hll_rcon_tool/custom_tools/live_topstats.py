@@ -677,7 +677,7 @@ def generate_full_report(rcon, get_team_view_output, config, is_match_end: bool 
         )
 
         if has_vip_enabled:
-            vip_note = TRANSL['vip_footer_note'][live_topstats_config.LANG]
+            vip_note = f"{TRANSL['vip_note'][live_topstats_config.LANG]} ({live_topstats_config.GRANTED_VIP_HOURS} {TRANSL['hours'][live_topstats_config.LANG]})"
             report_sections.append(f"★ = {vip_note}")
 
     if player_lines:
