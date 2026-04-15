@@ -9,13 +9,13 @@ Source : https://github.com/ElGuillermo
 Feel free to use/modify/distribute, as long as you keep this note in your code
 """
 
-from datetime import datetime, timedelta, timezone
-from typing import Any
-from zoneinfo import ZoneInfo
-import logging
-import os
-from urllib.parse import urlparse  # is_valid_url()
-import re  # is_valid_url()
+from typing import Any                              # sanitize_to_int()
+from urllib.parse import urlparse                   # is_valid_url()
+import re                                           # is_valid_url()
+from datetime import datetime, timedelta, timezone  # is_vip_for_less_than_xh(), # give_xh_vip()
+from zoneinfo import ZoneInfo                       # give_xh_vip()
+import logging                                      # logger setup
+import os                                           # logger setup
 import discord
 
 from rcon.rcon import Rcon, StructuredLogLineWithMetaData
@@ -50,14 +50,14 @@ def sanitize_to_int(value: Any, default: int = 0, min_val: int = 0, max_val: int
     try:
         clean_val = int(float(value))
         if clean_val < min_val:
-            logger.warning(f"Invalid value in config ('%s' is too low, min allowed is '%s'), using default value : %s", value, min_val, default)
+            logger.warning("Invalid value in config ('%s' is too low, min allowed is '%s'), using default value : %s", value, min_val, default)
             return default
         if max_val is not None and clean_val > max_val:
-            logger.warning(f"Invalid value in config ('%s' is too high, max allowed is '%s'), using default value : %s", value, max_val, default)
+            logger.warning("Invalid value in config ('%s' is too high, max allowed is '%s'), using default value : %s", value, max_val, default)
             return default
         return clean_val
     except (ValueError, TypeError):
-        logger.warning(f"Invalid value in config ('%s' is not a valid number), using default value : %s", value, default)
+        logger.warning("Invalid value in config ('%s' is not a valid number), using default value : %s", value, default)
         return default
 
 
@@ -130,7 +130,7 @@ def clean_bonus(value, name="BONUS") -> float:
         except (ValueError, TypeError):
             logger.warning(
                 f"{name} has an invalid value or type ({type(value).__name__}: {value}). "
-                "Falling back to default value: 1.0"
+                "Falling back to default value: 1.0",
             )
 
     # Default fallback value (no bonus)
@@ -182,12 +182,17 @@ def give_xh_vip(rcon: Rcon, player_id: str, player_name: str, hours_awarded: int
     local_dt = expiration_dt.astimezone(local_tz)
 
     # Message building
-    header = TRANSL['vip_header'][live_topstats_config.LANG]  # "You are in the topstats!"
-    won_text = TRANSL['vip_won'][live_topstats_config.LANG]   # "You won a VIP until"
-    date_str = local_dt.strftime('%d/%m/%Y')                  # "01/01/2001"
-    at_text = TRANSL['vip_at'][live_topstats_config.LANG]     # "at"
-    time_str = local_dt.strftime('%Hh%M')                     # "12h00"
+    header = TRANSL['vip_header'][live_topstats_config.LANG]
+    won_text = TRANSL['vip_won'][live_topstats_config.LANG]
+    date_str = local_dt.strftime('%d/%m/%Y')
+    at_text = TRANSL['vip_at'][live_topstats_config.LANG]
+    time_str = local_dt.strftime('%Hh%M')
+    """
+    You are in the topstats!
 
+    You won a VIP until
+    01/01/2001, at 12h00 !
+    """
     return f"{header}\n\n{won_text}\n{date_str}, {at_text} {time_str} !"
 
 
@@ -357,7 +362,7 @@ def get_player_ranking(
             if is_vip_for_less_than_xh(rcon, player['player_id'], live_topstats_config.GRANTED_VIP_HOURS):
                 vip_message = give_xh_vip(rcon, player['player_id'], raw.get('name', player['name']), live_topstats_config.GRANTED_VIP_HOURS)
             else:
-                vip_message = f"{TRANSL['vip_header'][live_topstats_config.LANG]}\n\n{TRANSL['already_vip'][live_topstats_config.LANG]}\n"
+                vip_message = f"{TRANSL['vip_header'][live_topstats_config.LANG]}\n\n{TRANSL['already_vip'][live_topstats_config.LANG]}"
 
             # Send a message to the winners
             try:
@@ -594,10 +599,32 @@ SCORE_FUNCTIONS = {
 
 
 def generate_full_report(rcon, get_team_view_output, config, is_match_end: bool = False):
+    """
+    Calls children functions to get/sort/format rankings for players and squads,
+    then assemble them to generate the ingame message.
+
+    Arguments :
+        - rcon
+        - get_team_view_output : raw get_team_view() output from API
+        - config : the STATS_TO_DISPLAY dict set in config file
+        - is_match_end : enable VIP granting if True
+    """
     server_status = rcon.get_status()
     report_sections = []
 
     def process_config_category(category_key, fetch_func, main_header_key):
+        """
+        Get/sort/format rankings for players and squads
+
+        arguments:
+            - category_key : either "players" or "squads"
+            - fetch_func : name of the function called to provide data
+                - "get_player_ranking" if category_key is "players"
+                - "get_squad_ranking" if category_key is "squads"
+            - main_header_key : a TRANSL dict key
+                - "top_players" if category_key is "players"
+                - "top_squads" if category_key is "squads"
+        """
         cfg = config.get(category_key, {})
         category_lines = []
 
@@ -669,7 +696,7 @@ def generate_full_report(rcon, get_team_view_output, config, is_match_end: bool 
     # VIP legend (on top)
     # Check if VIP granting is available
     if is_match_end and player_lines and live_topstats_config.GRANTED_VIP_HOURS > 0:
-        # Check if VIP granting is enabled in observed stats
+        # Check if VIP granting is enabled for observed stats
         player_cfg = config.get("players", {})
         has_vip_enabled = any(
             any(r.get("vip_winners", 0) > 0 for r in rankings)
@@ -693,9 +720,9 @@ def stats_on_chat_command(
     struct_log: StructuredLogLineWithMetaData
 ):
     """
-    Message actual top scores to the player who types the defined command in chat
+    Message actual top stats to the player who types the defined command in chat
     """
-    # Check if script is enabled on actual server
+    # Check if script is enabled in config for this server
     server_number = get_server_number()
     if str(server_number) not in live_topstats_config.ENABLE_ON_SERVERS:
         return
@@ -703,10 +730,13 @@ def stats_on_chat_command(
     # Check log for mandatory variable
     chat_message: str|None = struct_log["sub_content"]
     if chat_message is None:
+        logger.error("No sub_content in CHAT log")
         return
 
-    # This message is the expected command word (insensitive case)
-    if chat_message.lower() == live_topstats_config.CHAT_COMMAND.lower():
+    # This message is one of the expected command word(s) (case insensitive)
+    if chat_message.lower() in (cmd.lower() for cmd in live_topstats_config.CHAT_COMMAND):
+
+        logger.info(f"'%s' ('%s') asked for topstats using '%s' command in chat on server '%s'", struct_log.get("player_name_1"), struct_log.get("player_id_1"), chat_message.lower(), server_number)
 
         # Check log for mandatory variable
         player_id: str|None = struct_log["player_id_1"]
@@ -748,8 +778,12 @@ def stats_on_match_end(
     """
     server_number = int(get_server_number())
 
-    # Check if script is enabled in config and on actual server
-    if not live_topstats_config.DISPLAY_ON_MATCHEND or str(server_number) not in live_topstats_config.ENABLE_ON_SERVERS:
+    # Check if script is enabled in config for this server
+    if str(server_number) not in live_topstats_config.ENABLE_ON_SERVERS:
+        return
+
+    # Check if script is enabled in config to be displayed on matchend
+    if not live_topstats_config.DISPLAY_ON_MATCHEND:
         return
 
     # Get data from RCON
@@ -765,7 +799,7 @@ def stats_on_match_end(
         message = f"{report}"
 
     # logs
-    logger.info(f"\n{message}")
+    logger.info(f"\n%s", message)
 
     # Ingame message
     # only if there is stats to display
