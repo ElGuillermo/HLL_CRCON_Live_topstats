@@ -24,11 +24,15 @@ LANG = 0
 #      ["2", "4", "5"] = enabled on servers 2, 4 and 5
 ENABLE_ON_SERVERS = ["1"]
 
-# Display on matchend ?
+# Should we display the stats to every player on matchend ?
+# True / False
 DISPLAY_ON_MATCHEND = True
 
-# Chat command
-CHAT_COMMAND = "!top"
+# The command(s) the players have to enter in chat to display their stats
+# You can have multiple commands
+# ex : ["!top", "!topstats"]
+# Note : the command is not case sensitive (ie : '!top' or '!TOP' will work the same)
+CHAT_COMMAND = ["!top"]
 
 # Stats to display
 # ----------------------------------------
