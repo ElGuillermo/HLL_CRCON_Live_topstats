@@ -19,10 +19,10 @@ Feel free to use/modify/distribute, as long as you keep this note in your code
 LANG = 0
 
 # Can be enabled/disabled on your different game servers
-# ie : ["1"]           = enabled only on server 1
-#      ["1", "2"]      = enabled on servers 1 and 2
-#      ["2", "4", "5"] = enabled on servers 2, 4 and 5
-ENABLE_ON_SERVERS = ["1"]
+# ie : [1]           = enabled only on server 1
+#      [1, 2]      = enabled on servers 1 and 2
+#      [2, 4, 5] = enabled on servers 2, 4 and 5
+ENABLE_ON_SERVERS = [1]
 
 # Should we display the stats to every player on matchend ?
 # True / False
@@ -31,7 +31,8 @@ DISPLAY_ON_MATCHEND = True
 # The command(s) the players have to enter in chat to display their stats
 # You can have multiple commands
 # ex : ["!top", "!topstats"]
-# Note : the command is not case sensitive (ie : '!top' or '!TOP' will work the same)
+# Note : the command(s) must start with a "!"
+# Note : the command(s) aren't case sensitive (ie : '!top' or '!TOP' will work the same)
 CHAT_COMMAND = ["!top"]
 
 # Stats to display
@@ -114,7 +115,7 @@ STATS_TO_DISPLAY = {
 #      0.67 = offense counts 1.5x more than defense (defense malus)
 #      0.5  = offense counts 2x more than defense (defense malus)
 #      0    = bonus disabled
-# Any negative value will be considered as positive (ie : -1.5 -> 1.5)
+# Any negative value will be ignored and defaulted to 1 (no bonus)
 DEFENSE_BONUS = 1.5
 
 # teamplay support bonus (combat + support * bonus)
@@ -148,21 +149,14 @@ LOCAL_TIMEZONE = "Etc/UTC"
 # Discord
 # -------------------------------------
 
-# Dedicated Discord's channel webhook
+# Dedicated Discord's channel webhook : send matchend topstats (the DISPLAY_ON_MATCHEND parameter above must be set on True)
 # (the script can run without any Discord output)
 # Syntax : ["webhook url", enabled (True/False)]
 DISCORD_CONFIG = [
-    ["https://discord.com/api/webhooks/...", False],  # Server 1
-    ["https://discord.com/api/webhooks/...", False],  # Server 2
-    ["https://discord.com/api/webhooks/...", False],  # Server 3
-    ["https://discord.com/api/webhooks/...", False],  # Server 4
-    ["https://discord.com/api/webhooks/...", False],  # Server 5
-    ["https://discord.com/api/webhooks/...", False],  # Server 6
-    ["https://discord.com/api/webhooks/...", False],  # Server 7
-    ["https://discord.com/api/webhooks/...", False],  # Server 8
-    ["https://discord.com/api/webhooks/...", False],  # Server 9
-    ["https://discord.com/api/webhooks/...", False]  # Server 10
-    # (you can add lines if you manage more than 10 servers)
+    ("https://discord.com/api/webhooks/...", False),  # Server 1
+    ("https://discord.com/api/webhooks/...", False),  # Server 2
+    ("https://discord.com/api/webhooks/...", False),  # Server 3
+    # (you can add lines if you manage more than 3 servers)
 ]
 
 
