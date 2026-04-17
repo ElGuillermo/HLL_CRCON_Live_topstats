@@ -858,13 +858,19 @@ def generate_full_report(rcon, get_team_view_output, stats_to_display, is_match_
         return category_lines
 
     # Final report construction
+    # -------------------- -------------------- --------------------
     player_lines = process_config_category("players", get_player_ranking, "top_players")
     squad_lines = process_config_category("squads", get_squad_ranking, "top_squads")
 
     # VIP legend
     # --------------------
     # Check if VIP granting is available
-    if is_match_end and player_lines and valid_config.granted_vip_hours > 0:
+    if (
+        is_match_end
+        and server_status["current_players"] >= valid_config.seed_limit
+        and valid_config.granted_vip_hours > 0
+        and player_lines
+    ):
         # Check if VIP granting is enabled for observed stats
         player_cfg = stats_to_display.get("players", {})
         has_vip_enabled = any(
@@ -878,24 +884,28 @@ def generate_full_report(rcon, get_team_view_output, stats_to_display, is_match_
 
     # Bonus
     # --------------------
-    # Collect all unique scores requested in the config
-    all_requested_scores = set()
-    for cat in stats_to_display.values():
-        for unit_stats in cat.values():
-            for r in unit_stats:
-                all_requested_scores.add(r.get("score", "").lower())
+    # Collect only scores that actually produced results in the report
+    all_active_scores = set()
+    for cat_lines in [player_lines, squad_lines]:
+        if cat_lines:
+            # We look into stats_to_display but only for categories that are not empty
+            category_key = "players" if cat_lines is player_lines else "squads"
+            cfg = stats_to_display.get(category_key, {})
+            for rankings in cfg.values():
+                for r in rankings:
+                    all_active_scores.add(r.get("score", "").lower())
 
     bonus_notes = []
 
-    # Defense bonus
+    # Defense
     defense_keys = {"defense_bonus", "player_offdef", "squad_offdef"}
-    if (all_requested_scores & defense_keys) and valid_config.defense_bonus != 1.0:
+    if (all_active_scores & defense_keys) and valid_config.defense_bonus != 1.0:
         label = TRANSL['defense_bonus'][valid_config.lang]
         bonus_notes.append(f"{label}: x{valid_config.defense_bonus}")
 
-    # Support bonus
+    # Support
     support_keys = {"support_bonus", "player_teamplay", "squad_teamplay"}
-    if (all_requested_scores & support_keys) and valid_config.support_bonus != 1.0:
+    if (all_active_scores & support_keys) and valid_config.support_bonus != 1.0:
         label = TRANSL['support_bonus'][valid_config.lang]
         bonus_notes.append(f"{label}: x{valid_config.support_bonus}")
 
