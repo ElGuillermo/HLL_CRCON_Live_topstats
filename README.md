@@ -18,7 +18,8 @@ Unofficial plugin for the Hell Let Loose (HLL) [CRCON](https://github.com/Marech
 - Endgame stats can be sent in a Discord channel.
 - Available translations : english, french, spanish, german, russian, brazilian portuguese, polish and chinese.
 
-![HLL_CRCON_Live_topstats2](https://github.com/user-attachments/assets/f2b89dae-0583-48a0-8d34-0600cb6acd98)
+<img width="400" alt="HLL_CRCON_Live_topstats2" src="https://github.com/user-attachments/assets/f2b89dae-0583-48a0-8d34-0600cb6acd98" />
+<img width="400" alt="HLL_CRCON_Live_topstats3" src="https://github.com/user-attachments/assets/4b4c3ce0-51b7-42e9-a0cf-5d2491a4d77b" />
 
 ### Observed scores
 
