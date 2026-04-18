@@ -5,7 +5,6 @@ Unofficial plugin for the Hell Let Loose (HLL) [CRCON](https://github.com/Marech
 ### Displays and rewards top players and squads, based on their stats.
 
 ![HLL_CRCON_Live_topstats1](https://github.com/user-attachments/assets/37999289-0bbc-44cb-8609-fa5107fc0280)
-![HLL_CRCON_Live_topstats2](https://github.com/user-attachments/assets/9d3cf23b-80ac-4167-b8f2-8198620fa818)
 
 ---
 
@@ -18,6 +17,8 @@ Unofficial plugin for the Hell Let Loose (HLL) [CRCON](https://github.com/Marech
 - VIPs can be awarded at endgame : choose the duration and the number of winners.
 - Endgame stats can be sent in a Discord channel.
 - Available translations : english, french, spanish, german, russian, brazilian portuguese, polish and chinese.
+
+![HLL_CRCON_Live_topstats2](https://github.com/user-attachments/assets/f2b89dae-0583-48a0-8d34-0600cb6acd98)
 
 ### Observed scores
 
